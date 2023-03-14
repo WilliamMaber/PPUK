@@ -1,0 +1,52 @@
+/* Article List */
+.hfeed {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.hfeed__entry-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.hentry {
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  margin: 0 0 20px;
+  padding: 20px;
+  width: calc(33.33% - 20px);
+}
+
+@media (max-width: 767px) {
+  .hentry {
+    width: 100%;
+  }
+}
+
+.entry-title {
+  margin: 0;
+}
+
+.entry-summary {
+  display: flex;
+  margin: 10px 0;
+}
+
+.entry-image {
+  border: 1px solid #ccc;
+  margin-right: 10px;
+  width: 100px;
+}
+
+.entry-summary p {
+  margin: 0;
+}
+
+.entry-metadata {
+  margin-top: auto;
+}

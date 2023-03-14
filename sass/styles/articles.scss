@@ -1,0 +1,45 @@
+// Define variables
+$primary-color: #007bff;
+$secondary-color: #6c757d;
+$text-color: #333;
+$font-family: 'Open Sans', sans-serif;
+
+// Set box-sizing to inherit for all elements
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+// Styles for article element
+article {
+  max-width: 800px; // Set maximum width of article to 800px
+  margin: 0 auto; // Center article horizontally on the page
+  padding: 1rem; // Add 1rem of padding to the article content
+}
+
+// Styles for entry title
+.entry-title {
+  font-size: 2rem; // Set font size to 2rem
+}
+
+// Styles for dateline
+.dateline {
+  margin-bottom: 1rem; // Add 1rem of margin to the bottom of dateline
+  font-size: 0.9rem; // Set font size to 0.9rem
+  color: $secondary-color; // Set color to secondary color
+}
+
+// Styles for summary
+.summary {
+  margin-bottom: 1.5rem; // Add 1.5rem of margin to the bottom of summary
+}
+
+// Styles for entry content
+.entry-content {
+  margin-bottom: 1.5rem; // Add 1.5rem of margin to the bottom of entry content
+  font-size: 1.1rem; // Set font size to 1.1rem
+  line-height: 1.8; // Set line height to 1.8
+}
+$bar-height: 60px;
+$bar-background-color: #333;
+$bar-text-color: #fff;

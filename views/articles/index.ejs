@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html class="hfeed">
+  <head>
+    <title>Article List - My Website</title>
+    <link rel="stylesheet" type="text/css" href="/styles/style.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="/styles/article_list.css" /> -->
+  </head>
+  <body>
+  
+    <% include ../partials/header %>
+    <main>
+      <h1 class="title">Recent Articles</h1 >
+    <div class="hfeed">
+      <ul class="hfeed__entry-list">
+        <% articles.forEach(function(article) { %>
+          <li class="hentry">
+            <h3 class="entry-title"><a href="/articles/<%= article.slug %>"><%= article.title %></a></h3>
+            <div class="entry-summary">
+              <img class="entry-image" src="<%= article.imageUrl %>" alt="<%= article.imageAlt %>">
+              <p><%= article.description %></p>
+            </div>
+            <div class="entry-metadata">
+              <p>Keywords: <%= article.keywords %></p>
+            </div>
+          </li>
+        <% }); %>
+      </ul>
+    </div>
+    </main>
+    <% include ../partials/footer %>
+  </body>
+</html>

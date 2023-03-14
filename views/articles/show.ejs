@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title><%= article.title %></title>
+    <meta name="description" content="<%= article.description %>" />
+    <meta name="author" content="<%= article.author %>" />
+    <link rel="stylesheet" href="/styles/style.css" />
+    <link rel="stylesheet" href="/styles/articles.css" />
+    <link
+      rel="alternate"
+      type="application/json"
+      href="/articles/<%= article.slug %>.json"
+      title="<%= article.title %>"
+    />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      href="/articles/feed/rss.xml"
+      title="RSS"
+    />
+    <link
+      rel="alternate"
+      type="application/atom+xml"
+      href="/articles/feed/atom.xml"
+      title="Atom"
+    />
+  </head>
+  <body itemscope itemtype="http://schema.org/Article">
+    <% include ../partials/header %>
+    <article class="hnews">
+      <header>
+        <h1 class="entry-title" itemprop="headline"><%= article.title %></h1>
+        <div class="dateline">
+          <time itemprop="datePublished" datetime="<%= article.datePublished %>"
+            ><%= article.datePublished %></time >
+          by
+          <span itemprop="author" itemscope itemtype="http://schema.org/Person"
+            ><span itemprop="name"><%= article.name %></span></span
+          >
+        </div>
+      </header>
+      <div class="summary" itemprop="description"><%= article.summary %></div>
+      <img
+        src="<%= article.thumbnailUrl %>"
+        alt="<%= article.thumbnailAlt %>"
+        itemprop="image"
+      />
+      <div class="entry-content" itemprop="articleBody">
+        <%- article.htmlContent %>
+      </div>
+    </article>
+    <footer></footer>
+    <% include ../partials/footer %>
+  </body>
+</html>

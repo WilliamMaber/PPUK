@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Signup</title>
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
+  <link href="/styles/style.css" rel="stylesheet">
+</head>
+
+<body>
+      
+      <% include partials/header %>
+<form action="/login" method="POST">
+  <div>
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required>
+  </div>
+  <div>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required>
+  </div>
+  <button type="submit">Login</button>
+</form>
+      <% include partials/footer %>
+
+</body>
+
+</html>
