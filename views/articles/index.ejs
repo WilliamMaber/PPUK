@@ -3,7 +3,7 @@
   <head>
     <title>Article List - My Website</title>
     <link rel="stylesheet" type="text/css" href="/styles/style.css" />
-    <!-- <link rel="stylesheet" type="text/css" href="/styles/article_list.css" /> -->
+    <link rel="stylesheet" type="text/css" href="/styles/article_list.css" />
   </head>
   <body>
   
@@ -17,10 +17,10 @@
             <h3 class="entry-title"><a href="/articles/<%= article.slug %>"><%= article.title %></a></h3>
             <div class="entry-summary">
               <img class="entry-image" src="<%= article.imageUrl %>" alt="<%= article.imageAlt %>">
-              <p><%= article.description %></p>
+              <p><%= article.summary %></p>
             </div>
             <div class="entry-metadata">
-              <p>Keywords: <%= article.keywords %></p>
+              <p>Keywords: <%= article.tags %></p>
             </div>
           </li>
         <% }); %>

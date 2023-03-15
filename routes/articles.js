@@ -23,9 +23,11 @@ function getArticleByFileName(fileName) {
 
   // Create the article object
   const article = {
+    imageUrl: data.imageUrl,
+    imageAlt: data.imageAlt,
     title: data.title,
     slug: data.slug,
-    summary: data.description,
+    summary: data.summary,
     tags: data.Keywords,
     name: data.name,
     datePublished: creationDate.toUTCString(),
@@ -59,14 +61,16 @@ function getArticles() {
 
     // Add the article object to the articles array
     articles.push({
+      imageUrl: data.imageUrl,
+      imageAlt: data.imageAlt,
       title: data.title,
       slug: data.slug,
-      summary: data.description,
+      summary: data.summary,
       tags: data.Keywords,
       name: data.name,
       datePublished: creationDate.toUTCString(),
       modificationDate: modificationDate.toUTCString(),
-      comments:[],
+      comments: [],
       htmlContent,
     });
   });

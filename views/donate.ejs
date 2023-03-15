@@ -1,0 +1,59 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Donation Page</title>
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
+  <link href="/styles/style.css" rel="stylesheet">
+</head>
+      <% include partials/header %>
+        <h1 class="title">Donation Page</h1>
+        <article>
+	<h1>Donate to Our Cause</h1>
+	<form>
+		<label for="amount">Donation Amount:</label>
+		<input type="text" name="amount" required>
+		<br>
+		<label for="currency">Currency:</label>
+		<select name="currency">
+			<option value="USD">USD</option>
+			<option value="EUR">EUR</option>
+			<option value="GBP">GBP</option>
+			<option value="CAD">CAD</option>
+			<option value="AUD">AUD</option>
+		</select>
+		<br>
+		<label for="paymentMethod">Payment Method:</label>
+		<select name="paymentMethod">
+			<option value="paypal">PayPal</option>
+			<option value="googlepay">Google Pay</option>
+			<option value="applepay">Apple Pay</option>
+			<option value="stripe">Stripe</option>
+		</select>
+		<br>
+		<button type="submit">Donate</button>
+	</form>
+	
+	
+		<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+			<input type="hidden" name="cmd" value="_donations">
+			<button type="submit">Donate with PayPal</button>
+		</form>
+		<button id="google-pay-button">Donate with Google Pay</button>
+		<button id="apple-pay-button">Donate with Apple Pay</button>
+		<form id="stripe-form">
+			<label for="card-element">Credit or Debit Card</label>
+			<div id="card-element">
+				<!-- A Stripe Element will be inserted here. -->
+			</div>
+			<!-- Used to display form errors. -->
+			<div id="card-errors" role="alert"></div>
+			<button type="submit">Donate with Stripe</button>
+		</form>
+    </article>
+      <% include partials/footer %>
+</body>
+
+</html>

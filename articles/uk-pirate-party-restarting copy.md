@@ -1,12 +1,12 @@
 ---
 name: Lucy Maber
 slug: uk-pirate-party-restarting
-imageUrl: https://example.com/image.jpg
-imageAlt: "UK Pirate Party logo"
-Title: Pirate Party UK Returns to Fight for Digital Rights and Social Justice
-Description: After a brief hiatus, Pirate Party UK is back and stronger than ever. With a renewed commitment to digital freedom, government transparency, and social justice, we're ready to fight for a fairer, more transparent society. We support LGBTQIA+ rights, including trans rights, and believe in promoting civil liberties for all.
+imageUrl: /media/PP.png
+imageAlt: "Pirate Party Logo"
+title: Pirate Party UK Returns to Fight for Digital Rights and Social Justice
+summary: After a brief hiatus, Pirate Party UK is back and stronger than ever. With a renewed commitment to digital freedom, government transparency, and social justice, we're ready to fight for a fairer, more transparent society. We support LGBTQIA+ rights, including trans rights, and believe in promoting civil liberties for all.
 Keywords: Pirate Party UK, digital rights, government transparency, social justice, LGBTQIA+ rights, trans rights, civil liberties.
-SocialMessages: Ahoy mateys! Pirate Party UK is back and ready to fight for digital rights, government transparency, and social justice. We support LGBTQIA+ rights, including trans rights, and believe in promoting civil liberties for all. Join us at https://pirateparty.org.uk/ #PiratePartyUK #DigitalRights #SocialJustice
+SocialMessages: Ahoy mateys! Pirate Party UK is back and ready to fight for digital rights, government transparency, and social justice. We support LGBTQIA+ rights, including trans rights, and believe in promoting civil liberties for all. Join us at https://pirateparty.org.uk/ \#PiratePartyUK \#DigitalRights \#SocialJustice
 ---
 Ahoy, me hearties!
 

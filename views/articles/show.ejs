@@ -28,10 +28,12 @@
   </head>
   <body itemscope itemtype="http://schema.org/Article">
     <% include ../partials/header %>
+    <h1 class="title">article</h1>
     <article class="hnews">
       <header>
         <h1 class="entry-title" itemprop="headline"><%= article.title %></h1>
         <div class="dateline">
+        
           <time itemprop="datePublished" datetime="<%= article.datePublished %>"
             ><%= article.datePublished %></time >
           by
@@ -40,10 +42,10 @@
           >
         </div>
       </header>
-      <div class="summary" itemprop="description"><%= article.summary %></div>
+      <div class="summary" itemprop="description"><%= article.description %></div>
       <img
-        src="<%= article.thumbnailUrl %>"
-        alt="<%= article.thumbnailAlt %>"
+        src="<%= article.imageUrl %>"
+        alt="<%= article.imageAlt %>"
         itemprop="image"
       />
       <div class="entry-content" itemprop="articleBody">
