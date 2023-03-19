@@ -14,7 +14,7 @@
       <ul class="hfeed__entry-list">
         <% articles.forEach(function(article) { %>
           <li class="hentry">
-            <h3 class="entry-title"><a href="/articles/<%= article.slug %>"><%= article.title %></a></h3>
+            <h3 class="entry-title"><a href="/articles/<%= article.filename %>"><%= article.title %></a></h3>
             <div class="entry-summary">
               <img class="entry-image" src="<%= article.imageUrl %>" alt="<%= article.imageAlt %>">
               <p><%= article.summary %></p>

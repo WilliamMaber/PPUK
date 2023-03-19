@@ -64,6 +64,7 @@ function getArticles() {
       imageUrl: data.imageUrl,
       imageAlt: data.imageAlt,
       title: data.title,
+      filename: filename.slice(0,filename.length-3),
       slug: data.slug,
       summary: data.summary,
       tags: data.Keywords,
