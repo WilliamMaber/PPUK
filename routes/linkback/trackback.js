@@ -1,7 +1,7 @@
 const express = require("express");
 const xmlbuilder = require("xmlbuilder");
-const Trackback = require("../../models/Trackback");
-
+const { Firestore } = require("@google-cloud/firestore");
+const firestore = new Firestore();
 const trackbackRouter = express.Router();
 
 // Trackback endpoint handler
@@ -23,14 +23,15 @@ trackbackRouter.post("/:id", async (req, res) => {
 
   // Save the Trackback to the database
   try {
-    const trackback = new Trackback({
+    const trackbackRef = firestore.collection("trackbacks").doc();
+    await trackbackRef.set({
       title,
       url,
       excerpt,
       blog_name,
       post_id: id,
+      timestamp: Date.now(),
     });
-    await trackback.save();
   } catch (err) {
     console.error(err);
     const errorResponse = xmlbuilder

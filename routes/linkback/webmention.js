@@ -2,12 +2,13 @@ const express = require("express");
 const fetch = require("node-fetch");
 const { URLSearchParams } = require("url");
 const { DOMParser } = require("xmldom");
-const { Webmention } = require("../../models/Webmention.js");
+const { Firestore } = require("@google-cloud/firestore");
 
-const app = express();
+const router = express.Router();
+const db = new Firestore();
 
 // Define a route for handling incoming Webmention requests
-app.post("/webmention", async (req, res) => {
+router.post("/", async (req, res) => {
   // Validate the request by checking that the source and target parameters are present
   if (!req.body.source || !req.body.target) {
     return res.status(400).send("Bad Request");
@@ -19,12 +20,12 @@ app.post("/webmention", async (req, res) => {
 
   // If a Webmention endpoint was found, forward the Webmention request to the endpoint
   if (webmentionEndpoint) {
-    const webmention = new Webmention({
+    const webmentionRef = db.collection("webmentions").doc();
+    await webmentionRef.set({
       source: req.body.source,
       target: req.body.target,
       status: "pending",
     });
-    await webmention.save();
 
     const webmentionResponse = await fetch(webmentionEndpoint, {
       method: "POST",
@@ -37,8 +38,9 @@ app.post("/webmention", async (req, res) => {
       }).toString(),
     });
 
-    webmention.status = webmentionResponse.ok ? "success" : "error";
-    await webmention.save();
+    await webmentionRef.update({
+      status: webmentionResponse.ok ? "success" : "error",
+    });
 
     // Return the response from the Webmention endpoint to the sender
     res.status(webmentionResponse.status).send(webmentionResponse.statusText);
@@ -77,4 +79,4 @@ async function getWebmentionEndpoint(response) {
   return null;
 }
 
-module.exports = app;
+module.exports = router;

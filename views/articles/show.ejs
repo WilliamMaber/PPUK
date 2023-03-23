@@ -28,7 +28,7 @@
   </head>
   <body itemscope itemtype="http://schema.org/Article">
     <% include ../partials/header %>
-    <h1 class="title">article</h1>
+    <h1 class="title">Article</h1>
     <article class="hnews">
       <header>
         <h1 class="entry-title" itemprop="headline"><%= article.title %></h1>
@@ -42,7 +42,7 @@
           >
         </div>
       </header>
-      <div class="summary" itemprop="description"><%= article.description %></div>
+      <div class="summary" itemprop="description"><%= article.summary %></div>
       <img
         src="<%= article.imageUrl %>"
         alt="<%= article.imageAlt %>"

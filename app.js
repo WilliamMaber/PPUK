@@ -4,16 +4,18 @@ const sassMiddleware = require("node-sass-middleware");
 const session = require("express-session");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
-const MongoStore = require("connect-mongo");
+const { FirestoreStore } = require("@google-cloud/connect-firestore");
+const { Firestore } = require("@google-cloud/firestore");
+
 const path = require("path");
 const fs = require("fs");
 const { articlesRouter, getArticles } = require("./routes/articles.js");
-const { userRouter, User } = require("./routes/user.js");
+// const { userRouter, User } = require("./routes/user.js");
 const miscRouter = require("./routes/misc.js");
 const feedRouter = require("./routes/feed.js");
-const pingbackRouter = require("./routes/linkback/pingback.js");
-const trackbackRouter = require("./routes/linkback/trackback.js");
-const webmentionRouter = require("./routes/linkback/webmention.js");
+// const pingbackRouter = require("./routes/linkback/pingback.js");
+// const trackbackRouter = require("./routes/linkback/trackback.js");
+// const webmentionRouter = require("./routes/linkback/webmention.js");
 
 const app = express();
 // Set up EJS, Markdown, Grey Matter, and Sass
@@ -35,39 +37,39 @@ app.use(express.static(__dirname + "/public"));
 app.use(express.urlencoded({ extended: true }));
 
 // Set up session and passport
-const store = new MongoStore({
-  mongoUrl: "mongodb://localhost:27017/myapp",
-  ttl: 14 * 24 * 60 * 60, // = 14 days. Default
-});
+const store = new  FirestoreStore({
+      dataset: new Firestore(),
+      kind: 'express-sessions',
+    });
 
-app.use(
-  session({
-    secret: "my-secret-key",
-    resave: false,
-    saveUninitialized: false,
-    store: store,
-  })
-);
+// app.use(
+//   session({
+//     secret: "my-secret-key",
+//     resave: false,
+//     saveUninitialized: false,
+//     store: store,
+//   })
+// );
 
 // app.use(passport.initialize());
 // app.use(passport.session());
 
-passport.use(
-  new LocalStrategy(function (username, password, done) {
-    User.findOne({ username: username }, function (err, user) {
-      if (err) {
-        return done(err);
-      }
-      if (!user) {
-        return done(null, false, { message: "Incorrect username." });
-      }
-      if (!user.validPassword(password)) {
-        return done(null, false, { message: "Incorrect password." });
-      }
-      return done(null, user);
-    });
-  })
-);
+// passport.use(
+//   new LocalStrategy(function (username, password, done) {
+//     User.findOne({ username: username }, function (err, user) {
+//       if (err) {
+//         return done(err);
+//       }
+//       if (!user) {
+//         return done(null, false, { message: "Incorrect username." });
+//       }
+//       if (!user.validPassword(password)) {
+//         return done(null, false, { message: "Incorrect password." });
+//       }
+//       return done(null, user);
+//     });
+//   })
+// );
 
 passport.serializeUser(function (user, done) {
   done(null, user.id);
@@ -85,12 +87,12 @@ app.get("/", (req, res) => {
   res.render("index", { articles, title: "", user: "" });
 });
 
-app.use("/pingback",pingbackRouter);
-app.use("/trackback",trackbackRouter);
-app.use("/webmention",webmentionRouter);
+// app.use("/pingback",pingbackRouter);
+// app.use("/trackback",trackbackRouter);
+// app.use("/webmention",webmentionRouter);
 app.use("/", miscRouter);
 app.use("/articles", articlesRouter);
-app.use("/user", userRouter);
+// app.use("/user", userRouter);
 app.use("/feed", feedRouter);
 
 app.use(express.static("public"));
@@ -126,8 +128,8 @@ app.get("/*", (req, res, next) => {
     next();
   }
 });
-
+let port = 3000;
 // Start the server
-app.listen(3000, () => {
-  console.log("Server listening on port 3000");
+app.listen(process.env.PORT || port, () => {
+  console.log(`Server listening on port ${process.env.PORT || port}`);
 });

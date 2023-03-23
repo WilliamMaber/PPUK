@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const Pingback = require("../../models/Pingback.js");
+const { parseString } = require("xml2js");
+const { Firestore } = require("@google-cloud/firestore");
+
+const firestore = new Firestore();
 
 router.post("/", (req, res) => {
   // Check if the request is a Pingback request
@@ -11,7 +14,7 @@ router.post("/", (req, res) => {
     parsePingbackXML(requestBody)
       .then(({ sourceUrl, targetUrl }) => {
         // Receive the Pingback and send a success or error message in response
-        Pingback.receivePingback(sourceUrl, targetUrl)
+        receivePingback(sourceUrl, targetUrl)
           .then((message) => {
             res
               .status(200)
@@ -62,6 +65,18 @@ function getPingbackResponseXML(message) {
             </params>
           </methodResponse>
         `;
+}
+
+// Function to receive the Pingback and store it in Firestore
+async function receivePingback(sourceUrl, targetUrl) {
+  const pingbackRef = firestore.collection("pingbacks").doc();
+  const pingback = {
+    sourceUrl,
+    targetUrl,
+    receivedAt: new Date(),
+  };
+  await pingbackRef.set(pingback);
+  return "Pingback received";
 }
 
 module.exports = router;
