@@ -51,7 +51,7 @@ passport.deserializeUser(function (id, done) {
 
 // Render the login page
 router.get("/login", function (req, res) {
-  res.render("auth/login", { title: "Log in" });
+  res.render("auth/login", { title: "Log in", user: req.user });
 });
 
 // Process the login form
@@ -66,7 +66,7 @@ router.post(
 
 // Render the signup page
 router.get("/signup", function (req, res) {
-  res.render("auth/signup", { title: "Sign up" });
+  res.render("auth/signup", { title: "Sign up",user:req.user });
 });
 
 // Process the signup form

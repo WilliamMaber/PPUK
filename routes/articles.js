@@ -83,7 +83,7 @@ function getArticles() {
 // GET /articles - display all articles
 router.get("/", (req, res) => {
   const articles = getArticles();
-  res.render("articles/index", { articles, user: ""  });
+  res.render("articles/index", { articles, user: req.user });
 });
 
 // GET /articles/:slug - display a specific article
@@ -94,14 +94,14 @@ router.get("/:FileName", (req, res) => {
     return res.status(404).send("Article not found");
   }
 
-  res.render("articles/show", { article:article, user: "" });
+  res.render("articles/show", { article: article, user: req.user });
 });
 
 
 router.get("/", (req, res) => {
   const articles = getArticles();
   console.log(articles);
-  res.render("articles/index", { title: "Articles" ,articles, user: ""  });
+  res.render("articles/index", { title: "Articles", articles, user: req.user });
 });
 
 module.exports = {

@@ -1,124 +1,119 @@
-const express = require('express');
-const bcrypt = require('bcrypt');
-const passport = require('passport');
+const express = require("express");
+const admin = require("firebase-admin");
+const passport = require("passport");
+const bcrypt = require("bcrypt");
+const { body, validationResult } = require("express-validator");
+const stripe = require("../utils/stripe");
+const emailVerification = require("../utils/emailVerification");
+const isLoggedIn = require("../utils/isLoggedIn");
+
 const router = express.Router();
-const firestore = require('../utils/firestore');
-const stripe = require('../utils/stripe');
-const emailVerification = require('../utils/emailVerification');
 
-// Render registration form
-router.get('/register', (req, res) => {
-  res.render('register');
-});
-
-// Handle registration form submission
-router.post('/register', async (req, res) => {
-  try {
-    // Extract user details from form data
-    const { firstName, lastName, email, password, dob, phoneNumber, homeAddress } = req.body;
-
-    // Hash password using bcrypt
-    const salt = await bcrypt.genSalt();
-    const hashedPassword = await bcrypt.hash(password, salt);
-
-    // Create new user in Firestore
-    const userDoc = await firestore.createUser({
-      firstName,
-      lastName,
-      email,
-      password: hashedPassword,
-      dob,
-      phoneNumber,
-      homeAddress,
-      role: 'user',
-      status: 'not_verified',
-    });
-
-    // Send email verification link
-    await emailVerification.sendVerificationEmail(userDoc.id, email);
-
-    // Redirect to login page
-    res.redirect('/accounts/login');
-  } catch (err) {
-    console.error(err);
-    res.render('register', { error: err.message });
-  }
-});
-
-// Render login form
-router.get('/login', (req, res) => {
-  res.render('login');
+// Render login page
+router.get("/login", (req, res) => {
+  res.render("login");
 });
 
 // Handle login form submission
-router.post('/login', passport.authenticate('local', {
-  successRedirect: '/accounts/dashboard',
-  failureRedirect: '/accounts/login',
-  failureFlash: true,
-}));
+router.post(
+  "/login",
+  passport.authenticate("local", {
+    successRedirect: "/",
+    failureRedirect: "/login",
+    failureFlash: true,
+  })
+);
 
-// // Render dashboard page
-// router.get('/dashboard', passport.authenticationMiddleware(), (req, res) => {
-//   res.render('dashboard', { user: req.user });
-// });
-
-// Handle user logout
-router.get('/logout', (req, res) => {
-  req.logout();
-  res.redirect('/');
+// Render registration page
+router.get("/register", (req, res) => {
+  res.render("register");
 });
 
-// // Render subscription page
-// router.get('/subscription', passport.authenticationMiddleware(), async (req, res) => {
-//   try {
-//     // Retrieve user's subscription data
-//     const subscription = await stripe.getSubscription(req.user.stripeSubscriptionId);
+// Handle registration form submission
+router.post(
+  "/register",
+  body("firstName")
+    .trim()
+    .isLength({ min: 1 })
+    .withMessage("First name is required"),
+  body("lastName")
+    .trim()
+    .isLength({ min: 1 })
+    .withMessage("Last name is required"),
+  body("dob").isDate().withMessage("Invalid date of birth"),
+  body("email")
+    .trim()
+    .isEmail()
+    .withMessage("Invalid email address")
+    .custom(async (value) => {
+      const snapshot = await admin
+        .firestore()
+        .collection("users")
+        .doc(value)
+        .get();
+      if (snapshot.exists) {
+        return Promise.reject("Email address is already in use");
+      }
+    }),
+  body("phone")
+    .trim()
+    .isMobilePhone("en-GB")
+    .withMessage("Invalid phone number"),
+  body("password")
+    .trim()
+    .isLength({ min: 8 })
+    .withMessage("Password must be at least 8 characters long"),
+  body("confirmPassword")
+    .trim()
+    .custom((value, { req }) => {
+      if (value !== req.body.password) {
+        throw new Error("Passwords do not match");
+      }
+      return true;
+    }),
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).render("register", { errors: errors.array() });
+    }
+    const { firstName, lastName, dob, email, phone, password } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
+    try {
+      const userRecord = await admin.auth().createUser({
+        email,
+        password,
+        displayName: `${firstName} ${lastName}`,
+      });
+      const emailVerificationToken =
+        await emailVerification.generateEmailVerificationToken(email);
+      await admin.firestore().collection("users").doc(email).set({
+        firstName,
+        lastName,
+        dob,
+        email,
+        phone,
+        emailVerificationToken,
+      });
+      await emailVerification.sendEmailVerification(
+        emailVerificationToken,
+        email
+      );
+      req.flash(
+        "success",
+        "Account created successfully. Please check your email for verification instructions."
+      );
+      res.redirect("/login");
+    } catch (error) {
+      req.flash("error", error.message);
+      res.redirect("/register");
+    }
+  }
+);
 
-//     // Render subscription page with subscription data
-//     res.render('subscription', { subscription });
-//   } catch (err) {
-//     console.error(err);
-//     res.render('subscription', { error: err.message });
-//   }
-// });
-
-// // Handle subscription form submission
-// router.post('/subscription', passport.authenticationMiddleware(), async (req, res) => {
-//   try {
-//     // Extract subscription tier and billing period from form data
-//     const { tier, period } = req.body;
-
-//     // Calculate price based on subscription tier and billing period
-//     let price;
-//     switch (tier) {
-//       case 'high':
-//         price = period === 'monthly' ? 444 : 8000;
-//         break;
-//       case 'standard':
-//         price = period === 'monthly' ? 333 : 4000;
-//         break;
-//       case 'reduced':
-//         price = period === 'monthly' ? 100 : 1200;
-//         break;
-//       case 'concessionary':
-//         price = period === 'monthly' ? 50 : 600;
-//         break;
-//       default:
-//         throw new Error(`Invalid subscription tier: ${tier}`);
-//     }
-
-//     // Create or update user's subscription in Stripe
-//     const subscription = await stripe.createOrUpdateSubscription(req.user.stripeCustomerId, price, period);
-
-//     // Update user's subscription data in Firestore
-//     await firestore.updateUser(req.user.id, { stripeSubscriptionId: subscription.id });
-
-//     // Redirect to subscription page with success message
-//     res.render('subscription', { subscription, success: 'Subscription updated successfully' });
-//   } catch (err) {
-//     console.error(err);
-//     res.render('subscription', { error: err.message });
-//   }
-// });
+// Handle logout
+router.get("/logout", (req, res) => {
+  req.logout();
+  res.redirect("/");
+});
 
 module.exports = router;

@@ -15,7 +15,7 @@ const feedRouter = require("./routes/feed.js");
 // const pingbackRouter = require("./routes/linkback/pingback.js");
 // const trackbackRouter = require("./routes/linkback/trackback.js");
 // const webmentionRouter = require("./routes/linkback/webmention.js");
-const addressLookupRouter = require("./routes/address_lookup.js");
+// const addressLookupRouter = require("./routes/address_lookup.js");
 const accountsRouter = require("./routes/accounts.js");
 const session_config = require("./data/session.json");
 
@@ -78,7 +78,6 @@ passport.deserializeUser(async (uid, done) => {
 
 
 // Routes
-app.use("/address-lookup", addressLookupRouter);
 app.use("/accounts", accountsRouter);
 
 
@@ -106,7 +105,7 @@ passport.deserializeUser(function (id, done) {
 // Define routes
 app.get("/", (req, res) => {
   const articles = getArticles();
-  res.render("index", { articles, title: "", user: "" });
+  res.render("index", { articles, title: "", user: req.user });
 });
 
 // app.use("/pingback",pingbackRouter);
@@ -129,7 +128,7 @@ app.get("/*", (req, res, next) => {
       const { data, content } = matter(fileContents);
       const ejsPath = data.template;
 
-      res.render(ejsPath, { ...data, content, user: "" });
+      res.render(ejsPath, { ...data, content, user: req.user });
     }
   });
 });
@@ -142,7 +141,7 @@ app.get("/*", (req, res, next) => {
     const filePath = path.join(req._parsedUrl.path + ".ejs").slice(1);
     console.log(filePath);
     try {
-      res.render(filePath, { user: "" });
+      res.render(filePath, {user:req.user });
     } catch {
       next();
     }
