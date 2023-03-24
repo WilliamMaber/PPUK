@@ -6,7 +6,6 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const { FirestoreStore } = require("@google-cloud/connect-firestore");
 const { Firestore } = require("@google-cloud/firestore");
-
 const path = require("path");
 const fs = require("fs");
 const { articlesRouter, getArticles } = require("./routes/articles.js");
@@ -16,6 +15,10 @@ const feedRouter = require("./routes/feed.js");
 // const pingbackRouter = require("./routes/linkback/pingback.js");
 // const trackbackRouter = require("./routes/linkback/trackback.js");
 // const webmentionRouter = require("./routes/linkback/webmention.js");
+const addressLookupRouter = require("./router/address_lookup.js");
+const accountsRouter = require("./router/accounts.js");
+
+
 
 const app = express();
 // Set up EJS, Markdown, Grey Matter, and Sass
@@ -32,44 +35,63 @@ app.use(
   })
 );
 
+
+// Middleware for sessions
+const sessionConfig = {
+  secret: JSON.parse(readFileSync('./data/session.json')).secret,
+  resave: false,
+  saveUninitialized: false,
+};
+app.use(session(sessionConfig));
+
+// Middleware for authentication
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(new LocalStrategy(
+  async (email, password, done) => {
+    try {
+      const userRecord = await firebaseAuth.getUserByEmail(email);
+      const isMatch = await bcrypt.compare(password, userRecord.passwordHash);
+      if (!isMatch) {
+        return done(null, false, { message: 'Invalid email or password.' });
+      }
+      return done(null, userRecord);
+    } catch (err) {
+      return done(err);
+    }
+  },
+));
+
+passport.serializeUser((user, done) => {
+  done(null, user.uid);
+});
+
+passport.deserializeUser(async (uid, done) => {
+  try {
+    const userRecord = await firebaseAuth.getUser(uid);
+    done(null, userRecord);
+  } catch (err) {
+    done(err);
+  }
+});
+
+
+// Routes
+app.use("/address-lookup", addressLookupRouter);
+app.use("/accounts", accountsRouter);
+
+
+
+
 app.use(express.static(__dirname + "/public"));
-
 app.use(express.urlencoded({ extended: true }));
-
 // Set up session and passport
 const store = new  FirestoreStore({
       dataset: new Firestore(),
       kind: 'express-sessions',
     });
 
-// app.use(
-//   session({
-//     secret: "my-secret-key",
-//     resave: false,
-//     saveUninitialized: false,
-//     store: store,
-//   })
-// );
-
-// app.use(passport.initialize());
-// app.use(passport.session());
-
-// passport.use(
-//   new LocalStrategy(function (username, password, done) {
-//     User.findOne({ username: username }, function (err, user) {
-//       if (err) {
-//         return done(err);
-//       }
-//       if (!user) {
-//         return done(null, false, { message: "Incorrect username." });
-//       }
-//       if (!user.validPassword(password)) {
-//         return done(null, false, { message: "Incorrect password." });
-//       }
-//       return done(null, user);
-//     });
-//   })
-// );
 
 passport.serializeUser(function (user, done) {
   done(null, user.id);
