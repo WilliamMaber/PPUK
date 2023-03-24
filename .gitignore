@@ -1,2 +1,9 @@
 node_modules
 data/session.json
+data/Firestore.json
+data/session.json
+data/session.json
+data/*
+data/emailVerification.json
+package.json
+package-lock.json

@@ -15,9 +15,9 @@ const feedRouter = require("./routes/feed.js");
 // const pingbackRouter = require("./routes/linkback/pingback.js");
 // const trackbackRouter = require("./routes/linkback/trackback.js");
 // const webmentionRouter = require("./routes/linkback/webmention.js");
-const addressLookupRouter = require("./router/address_lookup.js");
-const accountsRouter = require("./router/accounts.js");
-
+const addressLookupRouter = require("./routes/address_lookup.js");
+const accountsRouter = require("./routes/accounts.js");
+const session_config = require("./data/session.json");
 
 
 const app = express();
@@ -38,7 +38,7 @@ app.use(
 
 // Middleware for sessions
 const sessionConfig = {
-  secret: JSON.parse(readFileSync('./data/session.json')).secret,
+  secret: session_config.secret,
   resave: false,
   saveUninitialized: false,
 };
