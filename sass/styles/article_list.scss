@@ -1,52 +1,87 @@
-/* Article List */
-.hfeed {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
 
-.hfeed__entry-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  width: 100%;
-}
 
-.hentry {
-  border: 1px solid #ccc;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  margin: 0 0 20px;
+/* Main styles for article list page */
+main {
+  max-width: 800px;
+  margin: 0 auto;
   padding: 20px;
-  width: calc(33.33% - 20px);
-}
-
-@media (max-width: 767px) {
-  .hentry {
-    width: 100%;
+  
+  .title {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
   }
-}
-
-.entry-title {
-  margin: 0;
-}
-
-.entry-summary {
-  display: flex;
-  margin: 10px 0;
-}
-
-.entry-image {
-  border: 1px solid #ccc;
-  margin-right: 10px;
-  width: 100px;
-}
-
-.entry-summary p {
-  margin: 0;
-}
-
-.entry-metadata {
-  margin-top: auto;
+  
+  .hfeed {
+    margin-top: 30px;
+    
+    .hfeed__entry-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      
+      .hentry {
+        margin-bottom: 30px;
+        
+        .entry-title {
+          font-size: 1.5rem;
+          margin-bottom: 10px;
+          
+          a {
+            color: #333;
+            text-decoration: none;
+            
+            &:hover {
+              text-decoration: underline;
+            }
+          }
+        }
+        
+        .entry-summary {
+          display: flex;
+          flex-wrap: wrap;
+          
+          .entry-image {
+            width: 200px;
+            height: auto;
+            margin-right: 20px;
+          }
+          
+          p {
+            font-size: 1rem;
+            margin: 0;
+            flex: 1;
+          }
+        }
+        
+        .entry-metadata {
+          font-size: 0.8rem;
+          color: #666;
+          margin-top: 10px;
+          
+          p {
+            margin: 0;
+          }
+        }
+      }
+    }
+    
+    /* Styles for prev/next page links */
+    .prev-page, .next-page {
+      display: inline-block;
+      padding: 5px 10px;
+      background-color: #333;
+      color: #fff;
+      text-decoration: none;
+      margin-right: 10px;
+      
+      &:hover {
+        background-color: #555;
+      }
+      
+      &.next-page {
+        margin-right: 0;
+        margin-left: auto;
+      }
+    }
+  }
 }

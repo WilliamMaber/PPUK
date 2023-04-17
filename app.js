@@ -9,15 +9,11 @@ const { Firestore } = require("@google-cloud/firestore");
 const path = require("path");
 const fs = require("fs");
 const { articlesRouter, getArticles } = require("./routes/articles.js");
-// const { userRouter, User } = require("./routes/user.js");
 const miscRouter = require("./routes/misc.js");
 const feedRouter = require("./routes/feed.js");
-// const pingbackRouter = require("./routes/linkback/pingback.js");
-// const trackbackRouter = require("./routes/linkback/trackback.js");
-// const webmentionRouter = require("./routes/linkback/webmention.js");
-// const addressLookupRouter = require("./routes/address_lookup.js");
 const accountsRouter = require("./routes/accounts.js");
 const session_config = require("./data/session.json");
+const { router_sitemap,add_page,update_sitemap  } = require("./routes/sitemap.js");
 
 
 const app = express();
@@ -47,7 +43,6 @@ app.use(session(sessionConfig));
 // Middleware for authentication
 app.use(passport.initialize());
 app.use(passport.session());
-
 passport.use(new LocalStrategy(
   async (email, password, done) => {
     try {
@@ -79,6 +74,7 @@ passport.deserializeUser(async (uid, done) => {
 
 // Routes
 app.use("/accounts", accountsRouter);
+app.use("/s", router_sitemap);
 
 
 
@@ -149,6 +145,11 @@ app.get("/*", (req, res, next) => {
     next();
   }
 });
+add_page({ url: "/" });
+add_page({ url: "/articles" });
+add_page({ url: "/about" });
+add_page({ url: "/contact" });
+update_sitemap();
 let port = 3000;
 // Start the server
 app.listen(process.env.PORT || port, () => {
