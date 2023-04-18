@@ -70,7 +70,6 @@ router.post("/", isLoggedIn, async (req, res) => {
         .update({ subscription: { tier, sessionId: session.id } });
       res.redirect(session.url);
     } catch (err) {
-      console.log(err);
       req.flash("error", "Failed to create checkout session");
       res.redirect("/accounts/subscription");
     }

@@ -8,7 +8,6 @@ let pages = [];
 const pagesSet = new Set();
 
 function add_page(page,update=true) {
-    console.log(page);
     if (!page_exists(page.path)) {
       pages.push(page);
       pagesSet.add(page.path);

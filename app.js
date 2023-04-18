@@ -131,11 +131,9 @@ app.get("/*", (req, res, next) => {
 
 app.get("/*", (req, res, next) => {
   const test_path = path.join(__dirname, "views", req._parsedUrl.path + ".ejs");
-  console.log(test_path);
   if (fs.existsSync(test_path)) {
     // ...
     const filePath = path.join(req._parsedUrl.path + ".ejs").slice(1);
-    console.log(filePath);
     try {
       res.render(filePath, {user:req.user });
     } catch {

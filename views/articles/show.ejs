@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <title><%= article.title %></title>
+    <link rel="icon" href="/media/PP.svg" />
     <meta name="description" content="<%= article.description %>" />
     <meta name="author" content="<%= article.author %>" />
     <link rel="stylesheet" href="/styles/style.css" />
@@ -25,7 +26,7 @@
       href="/articles/feed/atom.xml"
       title="Atom"
     />
-  <link rel="icon" href="media/PP.svg">
+    <link rel="icon" href="media/PP.svg" />
   </head>
   <body itemscope itemtype="http://schema.org/Article">
     <% include ../partials/header %>
@@ -34,9 +35,9 @@
       <header>
         <h1 class="entry-title" itemprop="headline"><%= article.title %></h1>
         <div class="dateline">
-        
           <time itemprop="datePublished" datetime="<%= article.datePublished %>"
-            ><%= article.datePublished %></time >
+            ><%= article.datePublished %></time
+          >
           by
           <span itemprop="author" itemscope itemtype="http://schema.org/Person"
             ><span itemprop="name"><%= article.name %></span></span
