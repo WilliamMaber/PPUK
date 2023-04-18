@@ -7,3 +7,4 @@ data/*
 data/emailVerification.json
 package.json
 package-lock.json
+sitemap/sitemap-0.xml.gz
