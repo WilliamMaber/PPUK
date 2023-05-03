@@ -12,7 +12,7 @@ function add_page(page,update=true) {
       pages.push(page);
       pagesSet.add(page.path);
       if (update) {
-        update_sitemap();
+        // update_sitemap();
       }
     }
 }

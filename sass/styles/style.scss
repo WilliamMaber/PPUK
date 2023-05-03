@@ -151,7 +151,12 @@ article {
   padding: 1rem; // Add 1rem of padding to the article content
   margin-bottom: 10px;
 }
-
+main {
+  max-width: 800px; // Set maximum width of article to 800px
+  margin: 0 auto; // Center article horizontally on the page
+  padding: 1rem; // Add 1rem of padding to the article content
+  margin-bottom: 15px;
+}
 $bar-height: 60px;
 $bar-background-color: #333;
 $bar-text-color: #fff;

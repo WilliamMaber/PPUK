@@ -2,9 +2,10 @@
 
 /* Main styles for article list page */
 main {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
+  max-width: 800px; // Set maximum width of article to 800px
+  margin: 0 auto; // Center article horizontally on the page
+  padding: 3rem; // Add 1rem of padding to the article content
+  margin-bottom: 15px;
   
   .title {
     font-size: 2.5rem;
@@ -64,24 +65,19 @@ main {
         }
       }
     }
-    
-    /* Styles for prev/next page links */
-    .prev-page, .next-page {
-      display: inline-block;
-      padding: 5px 10px;
-      background-color: #333;
-      color: #fff;
-      text-decoration: none;
-      margin-right: 10px;
-      
-      &:hover {
-        background-color: #555;
       }
-      
-      &.next-page {
-        margin-right: 0;
-        margin-left: auto;
-      }
-    }
+}
+a.prev-page, a.next-page {
+  display: inline-block;
+  padding: 10px;
+  background-color: #eee;
+  border-radius: 5px;
+  margin: 20px 10px;
+  text-decoration: none;
+  color: #333;
+  font-size: 1.2rem;
+  
+  &:hover {
+    background-color: #ccc;
   }
 }

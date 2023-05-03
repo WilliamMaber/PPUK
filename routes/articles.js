@@ -9,7 +9,6 @@ const {
   page_remove,
   update_sitemap,
 } = require("./sitemap.js");
-const { log } = require("util");
 
 // Define a markdown parser with default options
 const md = markdownIt();
@@ -106,7 +105,7 @@ function getArticles() {
 // GET /articles - display all articles with pagination
 router.get("/", (req, res) => {
   // Set default page size and current page
-  const pageSize = 10;
+  const pageSize = 5;
   let page = req.query.page ? parseInt(req.query.page) : 1;
 
   // Get all articles

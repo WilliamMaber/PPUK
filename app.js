@@ -4,8 +4,8 @@ const sassMiddleware = require("node-sass-middleware");
 const session = require("express-session");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
-const { FirestoreStore } = require("@google-cloud/connect-firestore");
-const { Firestore } = require("@google-cloud/firestore");
+// const { FirestoreStore } = require("@google-cloud/connect-firestore");
+// const { Firestore } = require("@google-cloud/firestore");
 const path = require("path");
 const fs = require("fs");
 const { articlesRouter, getArticles } = require("./routes/articles.js");
@@ -82,10 +82,10 @@ app.use("/s", router_sitemap);
 app.use(express.static(__dirname + "/public"));
 app.use(express.urlencoded({ extended: true }));
 // Set up session and passport
-const store = new  FirestoreStore({
-      dataset: new Firestore(),
-      kind: 'express-sessions',
-    });
+// const store = new  FirestoreStore({
+//       dataset: new Firestore(),
+//       kind: 'express-sessions',
+//     });
 
 
 passport.serializeUser(function (user, done) {
@@ -147,9 +147,10 @@ add_page({ url: "/" });
 add_page({ url: "/articles" });
 add_page({ url: "/about" });
 add_page({ url: "/contact" });
-update_sitemap();
-let port = 3000;
+// update_sitemap();
 // Start the server
-app.listen(process.env.PORT || port, () => {
-  console.log(`Server listening on port ${process.env.PORT || port}`);
+const PORT = process.env.PORT || 8080;
+
+app.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`);
 });
