@@ -146,13 +146,13 @@ p {
 }
 // Styles for article element
 article {
-  max-width: 800px; // Set maximum width of article to 800px
+  // max-width: 800px; // Set maximum width of article to 800px
   margin: 0 auto; // Center article horizontally on the page
   padding: 1rem; // Add 1rem of padding to the article content
   margin-bottom: 10px;
 }
 main {
-  max-width: 800px; // Set maximum width of article to 800px
+  // max-width: 800px; // Set maximum width of article to 800px
   margin: 0 auto; // Center article horizontally on the page
   padding: 1rem; // Add 1rem of padding to the article content
   margin-bottom: 15px;
@@ -167,7 +167,7 @@ $bar-text-color: #fff;
   width: 100%;
   justify-content: space-around;
   align-items: center;
-  height: $bar-height;
+  // height: $bar-height;
   background-color: $bar-background-color;
   color: $bar-text-color;
   bottom: 0%;

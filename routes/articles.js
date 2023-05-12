@@ -94,7 +94,7 @@ function getArticles() {
       htmlContent,
     });
   });
-
+  articles.sort((a, b) => new Date(b.datePublished) - new Date(a.datePublished));
   return articles;
 }
 
