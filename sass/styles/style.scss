@@ -33,11 +33,14 @@ p {
 
 .navbar {
   background-color: #000;
-  height: 60px;
-  display: flex;
+  height: 70px;
+  // display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 20px;
+  padding: 0 0px;
+  ul{
+    padding-inline-start:0;
+  }
 }
 
 .navbar-brand {
@@ -87,7 +90,7 @@ p {
 }
 
 .article-card {
-  display: flex;
+  // display: flex;
   margin-bottom: 40px;
 }
 
@@ -149,8 +152,8 @@ article {
   // max-width: 800px; // Set maximum width of article to 800px
   margin: 0 auto; // Center article horizontally on the page
   padding: 1rem; // Add 1rem of padding to the article content
-  margin-bottom: 10px;
 }
+
 main {
   // max-width: 800px; // Set maximum width of article to 800px
   margin: 0 auto; // Center article horizontally on the page
@@ -162,7 +165,7 @@ $bar-background-color: #333;
 $bar-text-color: #fff;
 .bottom-bar {
   overflow: hidden;
-  display: flex;
+  // display: flex;
   position: fixed;
   width: 100%;
   justify-content: space-around;

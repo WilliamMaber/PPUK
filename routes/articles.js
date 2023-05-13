@@ -24,7 +24,9 @@ function getArticleByFileName(fileName) {
 
   // Get the file creation and modification dates
   const fileStats = fs.statSync(`./articles/${fileName}.md`);
-  const creationDate = fileStats.birthtime;
+  console.log(data.publishData);
+  const creationDate = Date(data.publishData);
+  
   const modificationDate = fileStats.mtime;
 
   // Create the article object
@@ -36,7 +38,7 @@ function getArticleByFileName(fileName) {
     summary: data.summary,
     tags: data.Keywords,
     name: data.name,
-    datePublished: creationDate.toUTCString(),
+    datePublished: creationDate,
     modificationDate: modificationDate.toUTCString(),
     comments: [],
     htmlContent,
@@ -88,7 +90,7 @@ function getArticles() {
       summary: data.summary,
       tags: data.Keywords,
       name: data.name,
-      datePublished: creationDate.toUTCString(),
+      datePublished: Date(data.publishData),
       modificationDate: modificationDate.toUTCString(),
       comments: [],
       htmlContent,
