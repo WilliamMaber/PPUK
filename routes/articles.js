@@ -67,19 +67,6 @@ function getArticles() {
     const creationDate = fileStats.birthtime;
     const modificationDate = fileStats.mtime;
     let filename_ = filename.slice(0,filename.length-3);
-    add_page({
-      url: "/articles/" + filename_,
-      news: {
-        publication: {
-          name: "ppuk blog",
-          language: "en",
-        },
-        genres: "PressRelease, Blog",
-        publication_date: modificationDate.toUTCString(),
-        title: data.title,
-        keywords: data.Keywords,
-      },
-    });
     // Add the article object to the articles array
     articles.push({
       imageUrl: data.imageUrl,
@@ -90,20 +77,17 @@ function getArticles() {
       summary: data.summary,
       tags: data.Keywords,
       name: data.name,
-      datePublished: Date(data.publishData),
-      modificationDate: modificationDate.toUTCString(),
+      datePublished: new Date(data.publishData),
+      // modificationDate: modificationDate.toUTCString(),
       comments: [],
       htmlContent,
     });
   });
-  articles.sort((a, b) => new Date(b.datePublished) - new Date(a.datePublished));
+  articles.sort((a, b) => b.datePublished - a.datePublished);
   return articles;
 }
 
 
-// GET /articles - display all articles with pagination
-
-// GET /articles - display all articles with pagination
 // GET /articles - display all articles with pagination
 router.get("/", (req, res) => {
   // Set default page size and current page

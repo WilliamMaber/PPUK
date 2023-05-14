@@ -5,7 +5,7 @@ imageAlt: "Pirate Party Logo"
 title: Pirate Party UK Joins Call to Protect Privacy and Free Speech in Online Safety Bill
 summary: The Pirate Party UK has voiced concerns about the impact of the UK's Online Safety Bill on fundamental rights such as privacy and free speech. The party supports organizations such as EFF, Open Rights Group, Wikimedia UK, and Index on Censorship in calling for the protection of private messaging and the prevention of prior restraint of lawful speech.
 Keywords: Pirate Party UK, Online Safety Bill, privacy, free speech, fundamental rights, private messaging, prior restraint, EFF, Open Rights Group, Wikimedia UK, Index on Censorship
-publishData: 2023-05-13
+publishData: "2023/05/13"
 ---
 As a political party that champions digital rights and free expression, the Pirate Party UK is deeply concerned about the Online Safety Bill currently under consideration by the House of Lords. We stand with organizations such as [EFF](https://www.eff.org/), [Open Rights Group](https://www.openrightsgroup.org/), [Wikimedia UK](https://wikimedia.org.uk/), and [Index on Censorship](https://www.indexoncensorship.org/), who have raised serious concerns about the impact of this legislation on fundamental rights such as the right to privacy and free speech.
 
