@@ -1,1 +1,47 @@
-<!DOCTYPE html><html style="box-sizing: border-box;"><head style="box-sizing: border-box;"><meta charset="UTF-8" style="box-sizing: border-box;"><title style="box-sizing: border-box;">Register</title><link rel="icon" href="media/PP.svg" style="box-sizing: border-box;"><title style="box-sizing: border-box;">PPUK</title></head><body style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); -webkit-text-size-adjust: 100%; background-color: var(--bs-body-bg); box-sizing: border-box; color: var(--bs-body-color); font-family: var(--bs-body-font-family); font-size: var(--bs-body-font-size); font-weight: var(--bs-body-font-weight); line-height: var(--bs-body-line-height); margin: 0; text-align: var(--bs-body-text-align);"><div class="container" style="--bs-gutter-x: 1.5rem; --bs-gutter-y: 0; box-sizing: border-box; margin-left: auto; margin-right: auto; padding-left: calc(var(--bs-gutter-x) * 0.5); padding-right: calc(var(--bs-gutter-x) * 0.5); width: 100%;"><h1 style="box-sizing: border-box; font-size: calc(1.375rem + 1.5vw); font-weight: 500; line-height: 1.2; margin-bottom: 0.5rem; margin-top: 0;">Register</h1><form method="post" action="/register" style="box-sizing: border-box;"><label for="firstName" style="box-sizing: border-box; display: inline-block;">First Name:</label> <input type="text" id="firstName" name="firstName" required style="box-sizing: border-box; font-family: inherit; font-size: inherit; line-height: inherit; margin: 0;"> <label for="lastName" style="box-sizing: border-box; display: inline-block;">Last Name:</label> <input type="text" id="lastName" name="lastName" required style="box-sizing: border-box; font-family: inherit; font-size: inherit; line-height: inherit; margin: 0;"> <label for="dob" style="box-sizing: border-box; display: inline-block;">Date of Birth:</label> <input type="date" id="dob" name="dob" required style="box-sizing: border-box; font-family: inherit; font-size: inherit; line-height: inherit; margin: 0;"> <label for="address" style="box-sizing: border-box; display: inline-block;">Address:</label> <input type="text" id="address" name="address" required style="box-sizing: border-box; font-family: inherit; font-size: inherit; line-height: inherit; margin: 0;"> <label for="email" style="box-sizing: border-box; display: inline-block;">Email:</label> <input type="email" id="email" name="email" required style="box-sizing: border-box; font-family: inherit; font-size: inherit; line-height: inherit; margin: 0;"> <label for="phone" style="box-sizing: border-box; display: inline-block;">Phone Number:</label> <input type="tel" id="phone" name="phone" required style="box-sizing: border-box; font-family: inherit; font-size: inherit; line-height: inherit; margin: 0;"> <label for="password" style="box-sizing: border-box; display: inline-block;">Password:</label> <input type="password" id="password" name="password" required style="box-sizing: border-box; font-family: inherit; font-size: inherit; line-height: inherit; margin: 0;"> <input type="submit" value="Sign Up" style="-webkit-appearance: button; box-sizing: border-box; cursor: pointer; font-family: inherit; font-size: inherit; line-height: inherit; margin: 0;"></form></div></body></html>
+<!DOCTYPE html>
+<html style="box-sizing: border-box;">
+
+<head style="box-sizing: border-box;">
+  <meta charset="UTF-8" style="box-sizing: border-box;">
+  <title style="box-sizing: border-box;">Register</title>
+  
+  <link rel="icon" href="media/PP.svg" style="box-sizing: border-box;">
+
+    <title style="box-sizing: border-box;"> PPUK </title>
+</head>
+
+<body style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); -webkit-text-size-adjust: 100%; background-color: var(--bs-body-bg); box-sizing: border-box; color: var(--bs-body-color); font-family: var(--bs-body-font-family); font-size: var(--bs-body-font-size); font-weight: var(--bs-body-font-weight); line-height: var(--bs-body-line-height); margin: 0; text-align: var(--bs-body-text-align);">
+  
+  
+  <div class="container" style="--bs-gutter-x: 1.5rem; --bs-gutter-y: 0; box-sizing: border-box; margin-left: auto; margin-right: auto; padding-left: calc(var(--bs-gutter-x) * 0.5); padding-right: calc(var(--bs-gutter-x) * 0.5); width: 100%;">
+    
+    <h1 style="box-sizing: border-box; font-size: calc(1.375rem + 1.5vw); font-weight: 500; line-height: 1.2; margin-bottom: 0.5rem; margin-top: 0;">Register</h1>
+    <form method="post" action="/register" style="box-sizing: border-box;">
+      <label for="firstName" style="box-sizing: border-box; display: inline-block;">First Name:</label>
+      <input type="text" id="firstName" name="firstName" required style="box-sizing: border-box; font-family: inherit; font-size: inherit; line-height: inherit; margin: 0;">
+
+      <label for="lastName" style="box-sizing: border-box; display: inline-block;">Last Name:</label>
+      <input type="text" id="lastName" name="lastName" required style="box-sizing: border-box; font-family: inherit; font-size: inherit; line-height: inherit; margin: 0;">
+
+      <label for="dob" style="box-sizing: border-box; display: inline-block;">Date of Birth:</label>
+      <input type="date" id="dob" name="dob" required style="box-sizing: border-box; font-family: inherit; font-size: inherit; line-height: inherit; margin: 0;">
+
+      <label for="address" style="box-sizing: border-box; display: inline-block;">Address:</label>
+      <input type="text" id="address" name="address" required style="box-sizing: border-box; font-family: inherit; font-size: inherit; line-height: inherit; margin: 0;">
+
+      <label for="email" style="box-sizing: border-box; display: inline-block;">Email:</label>
+      <input type="email" id="email" name="email" required style="box-sizing: border-box; font-family: inherit; font-size: inherit; line-height: inherit; margin: 0;">
+
+      <label for="phone" style="box-sizing: border-box; display: inline-block;">Phone Number:</label>
+      <input type="tel" id="phone" name="phone" required style="box-sizing: border-box; font-family: inherit; font-size: inherit; line-height: inherit; margin: 0;">
+
+      <label for="password" style="box-sizing: border-box; display: inline-block;">Password:</label>
+      <input type="password" id="password" name="password" required style="box-sizing: border-box; font-family: inherit; font-size: inherit; line-height: inherit; margin: 0;">
+
+      <input type="submit" value="Sign Up" style="-webkit-appearance: button; box-sizing: border-box; cursor: pointer; font-family: inherit; font-size: inherit; line-height: inherit; margin: 0;">
+    </form>
+  </div>
+    
+</body>
+
+</html>

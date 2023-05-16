@@ -24,6 +24,7 @@ const inlineCss = require("gulp-inline-css");
 const ARTICLES_PER_PAGE = 5;
 
 let myFileLoader = function (filePath) {
+  console.log(filePath);
     return ""+ fs.readFileSync(filePath);
 }
 ejs_lowlevel.fileLoader = myFileLoader;
@@ -157,8 +158,7 @@ function generateArticleHtmlList(cb) {
 function generatePaths(cb) {
   return gulp
     .src("src/views/page/*.ejs")
-    .pipe(
-      ejs(
+    .pipe(ejs(
         {},
         {
           views: ["./src/views/"],
@@ -195,7 +195,7 @@ function style_css_inline(cb) {
       .src("temp/*?.html")
       .pipe(minifyInline())
       .pipe(inlineCss())
-      .pipe(htmlmin({ collapseWhitespace: true }))
+      // .pipe(htmlmin({ collapseWhitespace: true }))
       .pipe(gulp.dest("output/"));
 }
 function style_articles(cb) {
