@@ -9,12 +9,12 @@
   <link href="/styles/register.css" rel="stylesheet">
   <link rel="icon" href="media/PP.svg">
 
-    <title><%= title ? title : 'PPUK' %></title>
+    <title> PPUK </title>
 </head>
 
 <body>
   
-      <% include partials/header %>
+  <% include ("partials/header") %>
   <div class="container">
     <% if (locals.error) { %>
     <div class="alert alert-danger"><%= error %></div>
@@ -45,7 +45,7 @@
       <input type="submit" value="Sign Up" />
     </form>
   </div>
-      <% include partials/footer %>
+    <% include ("partials/footer") %>
 </body>
 
 </html>

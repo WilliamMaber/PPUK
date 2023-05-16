@@ -10,9 +10,9 @@
   <link rel="icon" href="media/PP.svg">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title><%= title ? title : 'PPUK' %></title>
+    <title>PPUK</title>
 </head>
-      <% include partials/header %>
+  <% include ("partials/header") %>
         <h1 class="title">Donation Page</h1>
         <article>
 	<h1>Donate to Our Cause</h1>
@@ -57,7 +57,7 @@
 			<button type="submit">Donate with Stripe</button>
 		</form>
     </article>
-      <% include partials/footer %>
+    <% include ("partials/footer") %>
 </body>
 
 </html>

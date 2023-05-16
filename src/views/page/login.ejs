@@ -9,12 +9,12 @@
   <link href="/styles/login.css" rel="stylesheet">
   <link rel="icon" href="media/PP.svg">
 
-    <title><%= title ? title : 'PPUK' %></title>
+    <title> PPUK </title>
 </head>
 
 <body>
       
-      <% include partials/header %>
+  <% include ("partials/header") %>
 <form action="/login" method="POST">
   <div>
     <label for="username">Username:</label>
@@ -26,7 +26,7 @@
   </div>
   <button type="submit">Login</button>
 </form>
-      <% include partials/footer %>
+    <% include ("partials/footer") %>
 
 </body>
 
