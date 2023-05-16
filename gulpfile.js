@@ -11,13 +11,16 @@ const concat = require("gulp-concat");
 const cleanCSS = require("gulp-clean-css");
 const terser = require("gulp-terser");
 const { glob } = require("glob");
+const svgo = require("gulp-svgo");
 const MarkdownIt = require("markdown-it");
 const matter = require("gray-matter");
-var each = require("gulp-each");
+const each = require("gulp-each");
 const gulp_sass = require("gulp-sass")(require("sass"));
-let ejs_lowlevel = require("ejs");
+const ejs_lowlevel = require("ejs");
 const webp = require("gulp-webp");
-
+const minifyInline = require("gulp-minify-inline");
+const postcss = require("gulp-postcss");
+const inlineCss = require("gulp-inline-css");
 const ARTICLES_PER_PAGE = 5;
 
 let myFileLoader = function (filePath) {
@@ -173,13 +176,38 @@ function media_image_2_webp(cb) {
     .pipe(gulp.dest("temp/media/"));
 }
 function style_sass_2_css(cb) {
+  var plugins = [
+  ];
   return gulp
-    .src("src/public/styles/*.sass")
-    .pipe(gulp_sass())
+    .src("src/styles/*.sass")
+    .pipe(gulp_sass({ includePaths: ["./", "./src/sass"] }))
+    .pipe(postcss(plugins))
     .pipe(gulp.dest("temp/styles/"));
 }
-function style_css_inline(cb) {}
-function copy_html(cb) {}
+function media_svg_2_svgo(cb) {
+  return gulp
+    .src("src/public/media/*.svg")
+    .pipe(svgo())
+    .pipe(gulp.dest("temp/media/"));
+}
+function style_css_inline(cb) {
+    return gulp
+      .src("temp/*?.html")
+      .pipe(minifyInline())
+      .pipe(inlineCss())
+      .pipe(htmlmin({ collapseWhitespace: true }))
+      .pipe(gulp.dest("output/"));
+}
+function style_articles(cb) {
+  return gulp
+    .src("temp/articles/*?.html")
+    .pipe(inlineCss())
+    .pipe(htmlmin({ collapseWhitespace: true }))
+    .pipe(gulp.dest("output/articles"));
+}
+function copy_html(cb) {
+  cb();
+}
 
 function clean(cb) {
   try {
@@ -196,7 +224,8 @@ exports.build = series(
     generateArticleHtmlList,
     generatePaths,
     media_image_2_webp,
-    style_sass_2_css
+    style_sass_2_css,
+    media_svg_2_svgo
   ),
-  parallel(style_css_inline, style_svg_inline, copy_html,style_css_inline,copy_html)
+  parallel(copy_html, style_css_inline, style_articles)
 );

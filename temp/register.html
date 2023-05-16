@@ -12,11 +12,9 @@
 
 <body>
   
-  <% include ("partials/header") %>
+  
   <div class="container">
-    <% if (locals.error) { %>
-    <div class="alert alert-danger"><%= error %></div>
-    <% } %>
+    
     <h1>Register</h1>
     <form method="post" action="/register">
       <label for="firstName">First Name:</label>
@@ -43,7 +41,7 @@
       <input type="submit" value="Sign Up" />
     </form>
   </div>
-    <% include ("partials/footer") %>
+    
 </body>
 
 </html>
