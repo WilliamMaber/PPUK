@@ -195,7 +195,7 @@ function style_css_inline(cb) {
       .src("temp/*?.html")
       .pipe(minifyInline())
       .pipe(inlineCss())
-      // .pipe(htmlmin({ collapseWhitespace: true }))
+      .pipe(htmlmin({ collapseWhitespace: true }))
       .pipe(gulp.dest("output/"));
 }
 function style_articles(cb) {
