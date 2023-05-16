@@ -70,8 +70,10 @@ function generateArticleHtmlPages(cb) {
 
 
 function generateArticleHtmlList(cb) {
+  cb();
+  return;
   try{
-  fs.mkdirSync("./temp/");
+    fs.mkdirSync("./temp/");
   }
   catch{}
   try {
@@ -85,6 +87,7 @@ function generateArticleHtmlList(cb) {
 
   const articleDataList = [];
   articleFilenames.forEach((filename) => {
+      console.log(filename);
     const fileContent = fs.readFileSync(`./src/articles/${filename}`, "utf-8");
     const { data, content } = matter(fileContent);
     const htmlContent = md.render(content);
