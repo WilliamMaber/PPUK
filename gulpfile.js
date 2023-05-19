@@ -9,6 +9,8 @@ const data = require("gulp-data");
 // const imagemin = require("gulp-imagemin");
 const concat = require("gulp-concat");
 const cleanCSS = require("gulp-clean-css");
+  const autoprefixer = require("autoprefixer");
+
 const terser = require("gulp-terser");
 const { glob } = require("glob");
 const svgo = require("gulp-svgo");
@@ -25,7 +27,8 @@ const ARTICLES_PER_PAGE = 5;
 
 let myFileLoader = function (filePath) {
   console.log(filePath);
-    return ""+ fs.readFileSync(filePath);
+  let data = fs.readFileSync(filePath);
+    return  data;
 }
 ejs_lowlevel.fileLoader = myFileLoader;
 
@@ -56,10 +59,7 @@ function generateArticleHtmlPages(cb) {
               htmlContent: htmlContent,
             },
           },
-          {
-            views: ["./src/views/"],
-            root: "./src/views/",
-          }
+          { views: ["./src/views/"]}
         );
         callback(null, out);
       })
@@ -70,8 +70,6 @@ function generateArticleHtmlPages(cb) {
 
 
 function generateArticleHtmlList(cb) {
-  cb();
-  return;
   try{
     fs.mkdirSync("./temp/");
   }
@@ -84,10 +82,8 @@ function generateArticleHtmlList(cb) {
   const articleFilenames = fs.readdirSync("./src/articles");
   const indexArticlePath = path.join(__dirname, "src/views/articles/index.ejs");
   const indexArticleContent = fs.readFileSync(indexArticlePath, "utf-8");
-
   const articleDataList = [];
   articleFilenames.forEach((filename) => {
-      console.log(filename);
     const fileContent = fs.readFileSync(`./src/articles/${filename}`, "utf-8");
     const { data, content } = matter(fileContent);
     const htmlContent = md.render(content);
@@ -110,6 +106,7 @@ function generateArticleHtmlList(cb) {
   const totalPages = Math.ceil(articleDataList.length / ARTICLES_PER_PAGE);
 
   const htmlPagesPromises = [];
+
   for (let page = 0; page < totalPages; page++) {
     const articlesForCurrentPage = articleDataList.slice(
       page * ARTICLES_PER_PAGE,
@@ -127,6 +124,7 @@ function generateArticleHtmlList(cb) {
         root: "./src/views/",
       }
     );
+    console.log(articleDataList);
 
     const htmlFilePath = path.join(
       __dirname,
@@ -164,7 +162,7 @@ function generatePaths(cb) {
     .pipe(ejs(
         {},
         {
-          views: ["./src/views/"],
+          views: ["./src/views"],
           root: "./src/views/",
         }
       )
@@ -179,11 +177,10 @@ function media_image_2_webp(cb) {
     .pipe(gulp.dest("temp/media/"));
 }
 function style_sass_2_css(cb) {
-  var plugins = [
-  ];
+  var plugins = [autoprefixer()];
   return gulp
     .src("src/styles/*.sass")
-    .pipe(gulp_sass({ includePaths: ["./", "./src/sass"] }))
+    .pipe(gulp_sass({ includePaths: ["./", "./node_modules", "./src/sass"] }))
     .pipe(postcss(plugins))
     .pipe(gulp.dest("temp/styles/"));
 }
@@ -196,8 +193,8 @@ function media_svg_2_svgo(cb) {
 function style_css_inline(cb) {
     return gulp
       .src("temp/*?.html")
-      .pipe(minifyInline())
-      .pipe(inlineCss())
+      // /.pipe(minifyInline())
+      // .pipe(inlineCss())
       .pipe(htmlmin({ collapseWhitespace: true }))
       .pipe(gulp.dest("output/"));
 }

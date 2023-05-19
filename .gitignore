@@ -4,6 +4,8 @@ data/Firestore.json
 data/session.json
 data/session.json
 data/*
+output/*
+temp/*
 data/emailVerification.json
 package.json
 package-lock.json
