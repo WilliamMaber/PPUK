@@ -5,32 +5,41 @@ const path = require("path");
 const fs = require("fs");
 const rename = require("gulp-rename");
 const htmlmin = require("gulp-htmlmin");
+const gulpBrotli = require("gulp-brotli");
+const zlib = require("zlib");
+const gzip = require("gulp-gzip");
 const data = require("gulp-data");
+const inline = require("gulp-inline");
+var winify = require("gulp-winify");
 // const imagemin = require("gulp-imagemin");
 const concat = require("gulp-concat");
 const cleanCSS = require("gulp-clean-css");
-  const autoprefixer = require("autoprefixer");
-
+const autoprefixer = require("autoprefixer");
+const purgecss = require("gulp-purgecss");
 const terser = require("gulp-terser");
 const { glob } = require("glob");
 const svgo = require("gulp-svgo");
 const MarkdownIt = require("markdown-it");
 const matter = require("gray-matter");
 const each = require("gulp-each");
-const gulp_sass = require("gulp-sass")(require("sass"));
+// const gulp_sass = require("gulp-sass")(require("sass"));
+const gulp_sass = require("gulp-dart-sass");
+const cssnano = require("cssnano");
 const ejs_lowlevel = require("ejs");
 const webp = require("gulp-webp");
 const minifyInline = require("gulp-minify-inline");
 const postcss = require("gulp-postcss");
 const inlineCss = require("gulp-inline-css");
+
 const ARTICLES_PER_PAGE = 5;
 
 let myFileLoader = function (filePath) {
-  console.log(filePath);
   let data = fs.readFileSync(filePath);
     return  data;
 }
 ejs_lowlevel.fileLoader = myFileLoader;
+
+
 
 function generateArticleHtmlPages(cb) {
   let md = new MarkdownIt();
@@ -101,7 +110,9 @@ function generateArticleHtmlList(cb) {
       htmlContent,
     };
     articleDataList.push(pageData);
+
   });
+  articleDataList.sort((a, b) => b.datePublished - a.datePublished);
 
   const totalPages = Math.ceil(articleDataList.length / ARTICLES_PER_PAGE);
 
@@ -124,7 +135,6 @@ function generateArticleHtmlList(cb) {
         root: "./src/views/",
       }
     );
-    console.log(articleDataList);
 
     const htmlFilePath = path.join(
       __dirname,
@@ -168,64 +178,161 @@ function generatePaths(cb) {
       )
     )
     .pipe(rename({ extname: ".html" }))
-    .pipe(gulp.dest("temp/"));;
+    .pipe(gulp.dest("temp/"));
 }
-function media_image_2_webp(cb) {
+function convertImagesToWebP(cb) {
   return gulp
     .src("src/public/media/*.{png,jpeg,gif,apng}")
     .pipe(webp())
     .pipe(gulp.dest("temp/media/"));
 }
-function style_sass_2_css(cb) {
-  var plugins = [autoprefixer()];
+function compileSassToCss(cb) {
+  var plugins = [autoprefixer(),cssnano()];
   return gulp
     .src("src/styles/*.sass")
-    .pipe(gulp_sass({ includePaths: ["./", "./node_modules", "./src/sass"] }))
+    .pipe(gulp_sass())
     .pipe(postcss(plugins))
+    .pipe(
+      purgecss({
+        content: ["src/views/**/*.ejs"],
+      })
+    )
     .pipe(gulp.dest("temp/styles/"));
 }
-function media_svg_2_svgo(cb) {
+function optimizeSvg(cb) {
   return gulp
     .src("src/public/media/*.svg")
     .pipe(svgo())
     .pipe(gulp.dest("temp/media/"));
 }
-function style_css_inline(cb) {
-    return gulp
-      .src("temp/*?.html")
-      // /.pipe(minifyInline())
-      // .pipe(inlineCss())
-      .pipe(htmlmin({ collapseWhitespace: true }))
-      .pipe(gulp.dest("output/"));
+function inlineCssforMainPage(cb) {
+    return (
+      gulp
+        .src("temp/*?.html")
+        .pipe(inline({ base: "output/" }))
+        .pipe(winify())
+        //
+        .pipe(htmlmin({ collapseWhitespace: true }))
+        .pipe(gulp.dest("output/"))
+    );
 }
-function style_articles(cb) {
+function inlineCssForArticles(cb) {
+  return (
+    gulp
+      .src("temp/articles/*?.html")
+      .pipe(htmlmin({ collapseWhitespace: true }))
+      .pipe(winify())
+      // .pipe(inlineCss())
+      .pipe(gulp.dest("output/articles"))
+  );
+}
+function copyMediaFiles(cb) {
   return gulp
-    .src("temp/articles/*?.html")
-    .pipe(inlineCss())
-    .pipe(htmlmin({ collapseWhitespace: true }))
-    .pipe(gulp.dest("output/articles"));
+    .src("temp/media/*.{png,jpeg,gif,webp,apng,svg}")
+    .pipe(gulp.dest("output/media/"));
+}
+function copyCssFiles(cb) {
+  return gulp.src("temp/styles/*.css").pipe(gulp.dest("output/styles/"));
+}
+function compressHtmlWithBrotli(cb) {
+  return gulp
+    .src("output/**")
+    .pipe(
+      gulpBrotli({
+        params: {
+          [zlib.constants.BROTLI_PARAM_QUALITY]:
+            zlib.constants.BROTLI_MAX_QUALITY,
+        },
+      })
+    )
+    .pipe(gulp.dest(`public_br/`));
+}
+function compressHtmlWithGzip(cb) {
+  return gulp
+    .src("output/**")
+    .pipe(gzip({ postExtension: "gz", gzipOptions: { level: 9 } }))
+    .pipe(gulp.dest(`public_gzip/`));
 }
 function copy_html(cb) {
   cb();
 }
 
-function clean(cb) {
+
+function cleanTempDirectory(cb) {
   try {
     fs.rmSync("./temp", { recursive: true, force: true });
-  } catch {}
-  cb();
+    console.log("Temporary directory cleaned successfully.");
+    cb(null);
+  } catch (error) {
+    console.error("Error cleaning temporary directory:", error);
+    cb(error);
+  }
+}
+
+
+function cleanOutputDirectory(cb) {
+  try {
+    fs.rmSync("./output", { recursive: true, force: true });
+    console.log("Temporary directory cleaned successfully.");
+    cb(null);
+  } catch (error) {
+    console.error("Error cleaning temporary directory:", error);
+    cb(error);
+  }
+}
+
+function cleanOutputDirectory(cb) {
+  try {
+    fs.rmSync("./output", { recursive: true, force: true });
+    console.log("Temporary directory cleaned successfully.");
+    cb(null);
+  } catch (error) {
+    console.error("Error cleaning temporary directory:", error);
+    cb(error);
+  }
+}
+function cleanPublicBrDirectory(cb) {
+  try {
+    fs.rmSync("public_br", { recursive: true, force: true });
+    console.log("public_br directory cleaned successfully.");
+    cb(null);
+  } catch (error) {
+    console.error("Error cleaning public_br directory:", error);
+    cb(error);
+  }
+}
+function cleanPublicGzipDirectory(cb) {
+  try {
+    fs.rmSync("./public_gzip", { recursive: true, force: true });
+    console.log("Temporary directory cleaned successfully.");
+    cb(null);
+  } catch (error) {
+    console.error("Error cleaning temporary directory:", error);
+    cb(error);
+  }
 }
 exports.build = series(
-  // remove all temp files
-  clean,
+  parallel(
+    cleanTempDirectory,
+    cleanOutputDirectory,
+    cleanPublicGzipDirectory,
+    cleanPublicBrDirectory
+  ),
   //
   parallel(
     generateArticleHtmlPages,
     generateArticleHtmlList,
     generatePaths,
-    media_image_2_webp,
-    style_sass_2_css,
-    media_svg_2_svgo
+    convertImagesToWebP,
+    compileSassToCss,
+    optimizeSvg
   ),
-  parallel(copy_html, style_css_inline, style_articles)
+  parallel(
+    copy_html,
+    inlineCssforMainPage,
+    inlineCssForArticles,
+    copyMediaFiles,
+    copyCssFiles
+  ),
+  parallel(compressHtmlWithBrotli, compressHtmlWithGzip)
 );

@@ -1,8 +1,0 @@
-{
-  "user": "myemail@gmail.com",
-  "password": "mypassword",
-  "port": 587,
-  "secure": false,
-  "host": "smtp.gmail.com",
-  "template": "<p>Please click the following link to verify your email address:</p><p><a href=\"%verificationUrl%\">%verificationUrl%</a></p>"
-}
