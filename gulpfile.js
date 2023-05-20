@@ -209,8 +209,8 @@ function inlineCssforMainPage(cb) {
     return (
       gulp
         .src("temp/*?.html")
-        .pipe(inline({ base: "output/" }))
-        .pipe(winify())
+        .pipe(inline({ base: "output/", disabledTypes: ["svg", "img", "js"] }))
+        // .pipe(winify())
         //
         .pipe(htmlmin({ collapseWhitespace: true }))
         .pipe(gulp.dest("output/"))
