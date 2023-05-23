@@ -1,0 +1,9 @@
+User-agent: *
+Disallow: 
+Crawl-delay: 10
+Disallow: user/
+Disallow: login.html
+Disallow: register.html
+Disallow: login/
+Disallow: register/
+Sitemap: sitemap-0.xml
