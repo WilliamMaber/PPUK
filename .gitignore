@@ -5,9 +5,9 @@ data/session.json
 data/session.json
 data/*
 output/*
-temp/*
+temp/**
 data/emailVerification.json
 package.json
 package-lock.json
-public_br/*
-public_gzip/*
+public_br/**
+public_gzip/**

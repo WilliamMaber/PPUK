@@ -25,25 +25,25 @@ app.use((req, res, next) => {
     requestedPath,
     "index.html.br"
   );
- for (p of [resolvedBrPath_hack, resolvedBrPath, resolvedBrPath_folder]) {
-   if (fs.existsSync(p) & canAcceptBrotli) {
-     try {
-       let statsObj = fs.statSync(p);
-       if (!statsObj.isFile()) {
-         continue;
-       }
-       const brReadStream = fs.createReadStream(p);
-       const fileExtension2 = p.match(/\.([^.]+)\.gz$/)[1];
-       res.set("Content-Encoding", "br");
-       const contentType =
-         mime.contentType(fileExtension2) || "application/octet-stream";
-       res.set("Content-Type", contentType);
-       brReadStream.pipe(res);
+  for (p of [resolvedBrPath_hack, resolvedBrPath, resolvedBrPath_folder]) {
+    if (fs.existsSync(p) & canAcceptBrotli) {
+      try {
+        let statsObj = fs.statSync(p);
+        if (!statsObj.isFile()) {
+          continue;
+        }
+        const brReadStream = fs.createReadStream(p);
+        const fileExtension2 = p.match(/\.([^.]+)\.gz$/)[1];
+        res.set("Content-Encoding", "br");
+        const contentType =
+          mime.contentType(fileExtension2) || "application/octet-stream";
+        res.set("Content-Type", contentType);
+        brReadStream.pipe(res);
 
-       return;
-     } catch {}
-   }
- }
+        return;
+      } catch {}
+    }
+  }
   let resolvedGzipPath_hack = path.join(
     __dirname.toString(),
     "public_gzip",
@@ -65,7 +65,7 @@ app.use((req, res, next) => {
     resolvedGzipPath,
     resolvedGzipPath_folder,
   ]) {
-    if (fs.existsSync(p)&canAcceptGzip) {
+    if (fs.existsSync(p) & canAcceptGzip) {
       try {
         let statsObj = fs.statSync(p);
         if (!statsObj.isFile()) {
@@ -74,7 +74,8 @@ app.use((req, res, next) => {
         const brReadStream = fs.createReadStream(p);
         const fileExtension2 = p.match(/\.([^.]+)\.gz$/)[1];
         res.set("Content-Encoding", "gzip");
-        const contentType = mime.contentType(fileExtension2) || "application/octet-stream";
+        const contentType =
+          mime.contentType(fileExtension2) || "application/octet-stream";
         res.set("Content-Type", contentType);
         brReadStream.pipe(res);
 
@@ -85,17 +86,16 @@ app.use((req, res, next) => {
   next();
 });
 app.use((req, res, next) => {
+  const options = {
+    root: path.join(__dirname, "output"),
+  };
 
-      const options = {
-        root: path.join(__dirname,"output",),
-      };
-
-      const fileName = "404.html";
-      res.sendFile(fileName, options, function (err) {
-        if (err) {
-          next(err);
-        } 
-      });
+  const fileName = "404.html";
+  res.sendFile(fileName, options, function (err) {
+    if (err) {
+      next(err);
+    }
+  });
 });
 // app.use(express.static("output"));
 
