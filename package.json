@@ -57,6 +57,7 @@
     "bootstrap-icons": "^1.10.5",
     "express": "^4.18.2",
     "feed": "^4.2.2",
+    "firebase": "^9.22.1",
     "gulp-purifycss": "^0.2.0",
     "gulp-sass": "^5.1.0",
     "mime-types": "^2.1.35",
