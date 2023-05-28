@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import VolunteerOpportunitiesList from "./VolunteerOpportunitiesList.jsx";
-ReactDOM.render(
+const root = ReactDOM.createRoot(
   React.createElement(VolunteerOpportunitiesList),
-  document.getElementById("userStatusContainer")
+  document.getElementById("VolunteerOpportunitiesListContainer")
 );

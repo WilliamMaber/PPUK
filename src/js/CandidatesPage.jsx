@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import CandidateDetails from './CandidateDetails';
+import CandidateDetails from './CandidateDetails.jsx';
 
 const CandidatesPage = () => {
   const [candidates] = useState([

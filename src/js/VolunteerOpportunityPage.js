@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import VotingPage from "./VolunteerOpportunityPage.jsx";
-ReactDOM.render(
-  React.createElement(VotingPage),
-  document.getElementById("userStatusContainer")
+import VolunteerOpportunityPage from "./VolunteerOpportunityPage.jsx";
+const root = ReactDOM.createRoot(
+  React.createElement(VolunteerOpportunityPage),
+  document.getElementById("VolunteerOpportunityPageContainer")
 );

@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import MemberDirectory from "./MemberDirectory.jsx";
-ReactDOM.render(
+const root = ReactDOM.createRoot(
   React.createElement(MemberDirectory),
-  document.getElementById("userStatusContainer")
+  document.getElementById("MemberDirectoryContainer")
 );

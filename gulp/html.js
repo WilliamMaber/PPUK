@@ -18,10 +18,10 @@ function inline_code_articles(cb) {
 }
 function inline_code_user(cb) {
   return gulp
-    .src("temp/articles/*.html")
+    .src("temp/user/*.html")
     .pipe(inline({ base: "temp/", disabledTypes: ["svg", "img", "js"] }))
     .pipe(htmlmin({ collapseWhitespace: true }))
-    .pipe(gulp.dest("output/articles"));
+    .pipe(gulp.dest("output/user"));
 }
 exports.inline_code = inline_code;
 exports.inline_code_articles = inline_code_articles;

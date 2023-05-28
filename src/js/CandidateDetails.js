@@ -1,7 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import CandidateDetails from "./CandidateDetails.jsx";
-ReactDOM.render(
+
+const root = ReactDOM.render(
   React.createElement(CandidateDetails),
-  document.getElementById("CandidatesPage")
+  document.getElementById("CandidateDetailsContainer")
 );
