@@ -109,19 +109,6 @@ const SettingsPage = () => {
           />
         </div>
 
-        <div className="mb-3">
-          <label htmlFor="currentPassword" className="form-label">
-            Current Password
-          </label>
-          <input
-            type="password"
-            className="form-control"
-            id="currentPassword"
-            value={currentPassword}
-            onChange={(e) => setCurrentPassword(e.target.value)}
-          />
-        </div>
-
         <button type="submit" className="btn btn-primary">
           Save
         </button>

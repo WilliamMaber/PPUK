@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import ManageUsers from "./ManageUsers.jsx";
-const root = ReactDOM.createRoot(
+ReactDOM.render(
   React.createElement(ManageUsers),
-  document.getElementById("userStatusContainer")
+  document.getElementById("ManageUsersContainer")
 );
