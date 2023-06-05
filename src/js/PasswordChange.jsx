@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { initializeApp } from "firebase/app";
+import 'firebase/auth';
 
 const PasswordChange = () => {
   const [password, setPassword] = useState('');
@@ -7,9 +9,22 @@ const PasswordChange = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Perform password change API request here
-    // Example: fetch('/api/password-change', { method: 'POST', body: { password, confirmPassword } })
-    // Handle success or error responses accordingly
+    if (password === confirmPassword) {
+      const user = firebase.auth().currentUser;
+
+      user.updatePassword(password)
+        .then(() => {
+          // Password changed successfully
+          console.log('Password changed successfully');
+        })
+        .catch((error) => {
+          // Handle password change error
+          console.error('Error changing password:', error);
+        });
+    } else {
+      // Handle password mismatch error
+      console.error('Passwords do not match');
+    }
   };
 
   return (

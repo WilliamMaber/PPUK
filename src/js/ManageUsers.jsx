@@ -1,4 +1,20 @@
+import { initializeApp } from "firebase/app";
+import { getFirestore, collection, getDocs } from 'firebase/firestore';
 import React, { useState, useEffect } from 'react';
+
+// Initialize Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyDL2CHHhPUg9K6_tV_5Z2bUl4wWcB3-sic",
+  authDomain: "ptate-df901.firebaseapp.com",
+  projectId: "ptate-df901",
+  storageBucket: "ptate-df901.appspot.com",
+  messagingSenderId: "795297920122",
+  appId: "1:795297920122:web:9cfd9b972dc92213dd77c3",
+  measurementId: "G-9MPXZR194T"
+};
+
+const app = initializeApp(firebaseConfig);
+const firestore = getFirestore(app);
 
 const ManageUsers = () => {
   const [users, setUsers] = useState([]);
@@ -7,30 +23,28 @@ const ManageUsers = () => {
   const [usersPerPage] = useState(5);
 
   useEffect(() => {
-    fetchUsers()
-      .then((data) => {
-        setUsers(data);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.error('Error fetching users:', error);
-      });
+    const unsubscribe = collection('users').onSnapshot((snapshot) => {
+      const userData = snapshot.docs.map((doc) => doc.data());
+      setUsers(userData);
+      setIsLoading(false);
+    });
+
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
-  const fetchUsers = () => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve([
-          { id: 1, name: 'John Doe', email: 'johndoe@example.com', role: 'Admin' },
-          { id: 2, name: 'Jane Smith', email: 'janesmith@example.com', role: 'User' },
-          // Add more users as needed
-        ]);
-      }, 1000);
-    });
-  };
-
   const handleDeleteUser = (userId) => {
-    console.log('Deleting user with ID:', userId);
+    firestore
+      .collection('users')
+      .doc(userId)
+      .delete()
+      .then(() => {
+        console.log('User deleted successfully');
+      })
+      .catch((error) => {
+        console.error('Error deleting user:', error);
+      });
   };
 
   // Pagination

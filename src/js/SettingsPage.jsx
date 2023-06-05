@@ -1,4 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { initializeApp } from "firebase/app";
+import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import 'firebase/auth';
+const firebaseConfig = {
+  apiKey: "AIzaSyDL2CHHhPUg9K6_tV_5Z2bUl4wWcB3-sic",
+  authDomain: "ptate-df901.firebaseapp.com",
+  projectId: "ptate-df901",
+  storageBucket: "ptate-df901.appspot.com",
+  messagingSenderId: "795297920122",
+  appId: "1:795297920122:web:9cfd9b972dc92213dd77c3",
+  measurementId: "G-9MPXZR194T"
+};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
 const SettingsPage = () => {
   const [firstName, setFirstName] = useState('');
@@ -9,106 +23,68 @@ const SettingsPage = () => {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [currentPassword, setCurrentPassword] = useState('');
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth,(authUser) => {
+      if (authUser) {
+        setUser(authUser);
+      } else {
+        setUser(null);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    // TODO: Implement form submission logic, e.g., send data to the server
+
+    if (!user) {
+      console.error('User not logged in');
+      return;
+    }
+
+    const firestore = getFirestore(app);
+    const userSettingsRef = collection('userSettings').doc(user.uid);
+
+    const settingsData = {
+      firstName,
+      lastName,
+      date,
+      address,
+      email,
+      phone,
+      password,
+      currentPassword,
+    };
+
+    userSettingsRef
+      .set(settingsData, { merge: true })
+      .then(() => {
+        console.log('Settings saved successfully');
+      })
+      .catch((error) => {
+        console.error('Error saving settings:', error);
+      });
+
+    // Clear form fields after submission
+    setFirstName('');
+    setLastName('');
+    setDate('');
+    setAddress('');
+    setEmail('');
+    setPhone('');
+    setPassword('');
+    setCurrentPassword('');
   };
 
   return (
     <div className="container pb-5 mb-5">
       <h1>Settings</h1>
       <form onSubmit={handleFormSubmit}>
-        <div className="mb-3">
-          <label htmlFor="firstName" className="form-label">
-            First Name
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="firstName"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-          />
-        </div>
-
-        <div className="mb-3">
-          <label htmlFor="lastName" className="form-label">
-            Last Name
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="lastName"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-          />
-        </div>
-
-        <div className="mb-3">
-          <label htmlFor="date" className="form-label">
-            Date
-          </label>
-          <input
-            type="date"
-            className="form-control"
-            id="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-          />
-        </div>
-
-        <div className="mb-3">
-          <label htmlFor="address" className="form-label">
-            Address
-          </label>
-          <textarea
-            className="form-control"
-            id="address"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-          />
-        </div>
-
-        <div className="mb-3">
-          <label htmlFor="email" className="form-label">
-            Email
-          </label>
-          <input
-            type="email"
-            className="form-control"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-
-        <div className="mb-3">
-          <label htmlFor="phone" className="form-label">
-            Phone
-          </label>
-          <input
-            type="tel"
-            className="form-control"
-            id="phone"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-          />
-        </div>
-
-        <div className="mb-3">
-          <label htmlFor="password" className="form-label">
-            Password
-          </label>
-          <input
-            type="password"
-            className="form-control"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-
+        {/* Form fields */}
+        {/* ... */}
         <button type="submit" className="btn btn-primary">
           Save
         </button>

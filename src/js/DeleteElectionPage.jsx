@@ -1,4 +1,20 @@
+import { initializeApp } from "firebase/app";
+import { getFirestore, collection, getDocs } from 'firebase/firestore';
 import React, { useState, useEffect } from 'react';
+
+// Initialize Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyDL2CHHhPUg9K6_tV_5Z2bUl4wWcB3-sic",
+  authDomain: "ptate-df901.firebaseapp.com",
+  projectId: "ptate-df901",
+  storageBucket: "ptate-df901.appspot.com",
+  messagingSenderId: "795297920122",
+  appId: "1:795297920122:web:9cfd9b972dc92213dd77c3",
+  measurementId: "G-9MPXZR194T"
+};
+
+const app = initializeApp(firebaseConfig);
+const firestore = getFirestore(app);
 
 const DeleteElectionPage = () => {
   const [elections, setElections] = useState([]);
@@ -6,37 +22,31 @@ const DeleteElectionPage = () => {
   const [deleted, setDeleted] = useState(false);
 
   useEffect(() => {
-    // Simulate loading elections from the server
-    fetchElections()
-      .then((data) => {
-        setElections(data);
-      })
-      .catch((error) => {
-        console.error('Error fetching elections:', error);
-      });
-  }, []);
-
-  const fetchElections = () => {
-    // Simulated fetch request to retrieve elections
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve([
-          { id: 1, name: 'Election 1' },
-          { id: 2, name: 'Election 2' },
-          { id: 3, name: 'Election 3' },
-          // Add more elections as needed
-        ]);
-      }, 1000);
+    const unsubscribe = collection('elections').onSnapshot((snapshot) => {
+      const electionsData = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      setElections(electionsData);
     });
-  };
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   const handleElectionSelection = (electionId) => {
     setSelectedElection(electionId);
   };
 
   const handleDeleteElection = () => {
-    // TODO: Implement deletion logic, e.g., send selectedElection to the server for deletion
-    setDeleted(true);
+    firestore
+      .collection('elections')
+      .doc(selectedElection)
+      .delete()
+      .then(() => {
+        setDeleted(true);
+      })
+      .catch((error) => {
+        console.error('Error deleting election:', error);
+      });
   };
 
   return (
