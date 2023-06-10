@@ -1,7 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import ElectionResults from "./ElectionResults.jsx";
-ReactDOM.render(
+
+const root = ReactDOM.render(
   React.createElement(ElectionResults),
-  document.getElementById("userStatusContainer")
+  document.getElementById("ElectionResultsContainer")
 );

@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { initializeApp } from "firebase/app";
+import { getFirestore, collection, getDocs } from 'firebase/firestore';
 
 const RecallMember = () => {
   const [memberId, setMemberId] = useState('');
@@ -11,6 +13,20 @@ const RecallMember = () => {
     event.preventDefault();
     // Perform recall process with the member ID
     console.log('Recall initiated for member ID:', memberId);
+
+    // Access Firestore collection and delete member document
+    const firestore = getFirestore(app);
+    const memberRef = collection('members').doc(memberId);
+
+    memberRef
+      .delete()
+      .then(() => {
+        console.log('Member recalled successfully');
+      })
+      .catch((error) => {
+        console.error('Error recalling member:', error);
+      });
+
     // Reset the input field after submission
     setMemberId('');
   };

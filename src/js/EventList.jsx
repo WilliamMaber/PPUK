@@ -1,29 +1,41 @@
+import { initializeApp } from "firebase/app";
+import { getFirestore, collection, getDocs } from 'firebase/firestore';
 import React, { useState, useEffect } from 'react';
+
+// Initialize Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyDL2CHHhPUg9K6_tV_5Z2bUl4wWcB3-sic",
+  authDomain: "ptate-df901.firebaseapp.com",
+  projectId: "ptate-df901",
+  storageBucket: "ptate-df901.appspot.com",
+  messagingSenderId: "795297920122",
+  appId: "1:795297920122:web:9cfd9b972dc92213dd77c3",
+  measurementId: "G-9MPXZR194T"
+};
+
+const app = initializeApp(firebaseConfig);
+const firestore = getFirestore(app);
 
 const EventList = () => {
   const [events, setEvents] = useState([]);
 
-  // Fetch events from the server or load from a JSON file
-  const fetchEvents = () => {
-    // Simulated data for events
-    const eventData = [
-      { id: 1, title: 'Event 1', date: '2023-06-01', location: 'Location 1' },
-      { id: 2, title: 'Event 2', date: '2023-06-05', location: 'Location 2' },
-      // Add more events as needed
-    ];
-    setEvents(eventData);
-  };
-
   useEffect(() => {
-    // Fetch events when the component mounts
-    fetchEvents();
+    const eventsRef = collection('events');
+    const unsubscribe = eventsRef.onSnapshot((snapshot) => {
+      const eventData = snapshot.docs.map((doc) => doc.data());
+      setEvents(eventData);
+    });
+
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   return (
     <div>
       <h1>Events and Meetings</h1>
       <ul>
-        {events.map(event => (
+        {events.map((event) => (
           <li key={event.id}>
             <h2>{event.title}</h2>
             <p>Date: {event.date}</p>

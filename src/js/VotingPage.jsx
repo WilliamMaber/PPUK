@@ -1,26 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { initializeApp } from "firebase/app";
+import { getFirestore, collection, getDocs } from 'firebase/firestore';
+
+// Initialize Firebase app with your Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyDL2CHHhPUg9K6_tV_5Z2bUl4wWcB3-sic",
+  authDomain: "ptate-df901.firebaseapp.com",
+  projectId: "ptate-df901",
+  storageBucket: "ptate-df901.appspot.com",
+  messagingSenderId: "795297920122",
+  appId: "1:795297920122:web:9cfd9b972dc92213dd77c3",
+  measurementId: "G-9MPXZR194T"
+};
+if (!firebase.apps.length) {
+  const app = initializeApp(firebaseConfig);
+}
 
 const VotingPage = () => {
   const [candidates, setCandidates] = useState([]);
   const [preferences, setPreferences] = useState({});
   const [submitted, setSubmitted] = useState(false);
 
-  // Fetch candidates from the server or load from a JSON file
-  // Modify this function to fetch candidates based on your implementation
-  const fetchCandidates = () => {
-    // Simulated data for candidates
-    const candidatesData = [
-      { id: 1, name: 'Candidate 1' },
-      { id: 2, name: 'Candidate 2' },
-      { id: 3, name: 'Candidate 3' },
-      // Add more candidates as needed
-    ];
-    setCandidates(candidatesData);
-  };
-
-  useState(() => {
+  useEffect(() => {
     fetchCandidates();
   }, []);
+
+  const fetchCandidates = async () => {
+    const candidatesRef = firebase.firestore().collection('candidates');
+    try {
+      const snapshot = await candidatesRef.get();
+      const candidatesData = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setCandidates(candidatesData);
+    } catch (error) {
+      console.error('Error fetching candidates:', error);
+    }
+  };
 
   const handlePreferenceChange = (candidateId, preference) => {
     setPreferences((prevPreferences) => ({
@@ -29,10 +46,16 @@ const VotingPage = () => {
     }));
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
-    // TODO: Implement logic to submit the preferences to the server for counting
-    setSubmitted(true);
+
+    const preferencesRef = firebase.firestore().collection('preferences');
+    try {
+      await preferencesRef.add(preferences);
+      setSubmitted(true);
+    } catch (error) {
+      console.error('Error submitting vote:', error);
+    }
   };
 
   return (
