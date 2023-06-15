@@ -149,7 +149,22 @@ function generateArticleHtmlPages(cb) {
     .pipe(gulp.dest("./temp/articles/"));
 }
 
-function generatePaths(cb) {
+function generatePaths_user(cb) {
+  return gulp
+    .src("./src/views/user/*.ejs")
+    .pipe(
+      ejs(
+        {},
+        {
+          views: [path.join(__dirname, "../", "./src/views/")],
+          root: path.join(__dirname, "../", "./src/views)"),
+        }
+      )
+    )
+    .pipe(rename({ extname: ".html" }))
+    .pipe(gulp.dest("temp/user/"));
+}
+function generatePaths_page(cb) {
   return gulp
     .src("./src/views/page/*.ejs")
     .pipe(
@@ -164,6 +179,23 @@ function generatePaths(cb) {
     .pipe(rename({ extname: ".html" }))
     .pipe(gulp.dest("temp/"));
 }
+function generatePaths_page(cb) {
+  return gulp
+    .src("./src/views/page/*.ejs")
+    .pipe(
+      ejs(
+        {},
+        {
+          views: [path.join(__dirname, "../", "./src/views/")],
+          root: path.join(__dirname, "../", "./src/views)"),
+        }
+      )
+    )
+    .pipe(rename({ extname: ".html" }))
+    .pipe(gulp.dest("temp/"));
+}
+
 exports.generateArticleHtmlList = generateArticleHtmlList;
 exports.generateArticleHtmlPages = generateArticleHtmlPages;
-exports.generatePaths = generatePaths;
+exports.generatePaths_user = generatePaths_user;
+exports.generatePaths_page = generatePaths_page;
