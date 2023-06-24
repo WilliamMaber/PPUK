@@ -17,106 +17,6 @@ import {
   setDoc,
 } from "firebase/firestore";
 
-
-const data = {
-  ".*\\.nhs\\.net$": { type: "nhs" },
-  ".*\\.ac\\.uk$": { type: "academia" },
-  ".*\\.ac\\.bd$": { type: "academia" },
-  ".*\\.ac\\.be$": { type: "academia" },
-  ".*\\.ac\\.bw$": { type: "academia" },
-  ".*\\.ac\\.cn$": { type: "academia" },
-  ".*\\.ac\\.cr$": { type: "academia" },
-  ".*\\.ac\\.cy$": { type: "academia" },
-  ".*\\.ac\\.fj$": { type: "academia" },
-  ".*\\.ac\\.in$": { type: "academia" },
-  ".*\\.ac\\.id$": { type: "academia" },
-  ".*\\.ac\\.ir$": { type: "academia" },
-  ".*\\.ac\\.il$": { type: "academia" },
-  ".*\\.ac\\.jp$": { type: "academia" },
-  ".*\\.ac\\.ke$": { type: "academia" },
-  ".*\\.ac\\.ma$": { type: "academia" },
-  ".*\\.ac\\.pg$": { type: "academia" },
-  ".*\\.ac\\.rw$": { type: "academia" },
-  ".*\\.ac\\.rs$": { type: "academia" },
-  ".*\\.ac\\.nz$": { type: "academia" },
-  ".*\\.ac\\.za$": { type: "academia" },
-  ".*\\.ac\\.kr$": { type: "academia" },
-  ".*\\.ac\\.ss$": { type: "academia" },
-  ".*\\.ac\\.lk$": { type: "academia" },
-  ".*\\.ac\\.tz$": { type: "academia" },
-  ".*\\.ac\\.th$": { type: "academia" },
-  ".*\\.ac\\.ug$": { type: "academia" },
-  ".*\\.ac\\.ae$": { type: "academia" },
-  ".*\\.ac\\.zm$": { type: "academia" },
-  ".*\\.ac\\.zw$": { type: "academia" },
-  ".*\\.mod\\.uk$": { type: "mod" },
-  ".*police\\.uk$": { type: "police" },
-  ".*\\.edu\\.ag$": { type: "academia" },
-  ".*\\.edu\\.ar$": { type: "academia" },
-  ".*\\.edu\\.au$": { type: "academia" },
-  ".*\\.edu\\.bd$": { type: "academia" },
-  ".*\\.edu\\.br$": { type: "academia" },
-  ".*\\.edu\\.bn$": { type: "academia" },
-  ".*\\.edu\\.cn$": { type: "academia" },
-  ".*\\.edu\\.co$": { type: "academia" },
-  ".*\\.edu\\.dj$": { type: "academia" },
-  ".*\\.edu\\.ec$": { type: "academia" },
-  ".*\\.edu\\.eg$": { type: "academia" },
-  ".*\\.edu\\.sv$": { type: "academia" },
-  ".*\\.edu\\.er$": { type: "academia" },
-  ".*\\.edu\\.ee$": { type: "academia" },
-  ".*\\.edu\\.et$": { type: "academia" },
-  ".*\\.edu\\.gh$": { type: "academia" },
-  ".*\\.edu\\.gr$": { type: "academia" },
-  ".*\\.edu\\.gt$": { type: "academia" },
-  ".*\\.edu\\.hk$": { type: "academia" },
-  ".*\\.edu\\.it$": { type: "academia" },
-  ".*\\.edu\\.in$": { type: "academia" },
-  ".*\\.edu\\.jm$": { type: "academia" },
-  ".*\\.edu\\.jo$": { type: "academia" },
-  ".*\\.edu\\.lb$": { type: "academia" },
-  ".*\\.edu\\.ly$": { type: "academia" },
-  ".*\\.edu\\.mo$": { type: "academia" },
-  ".*\\.edu\\.my$": { type: "academia" },
-  ".*\\.edu\\.mt$": { type: "academia" },
-  ".*\\.edu\\.mx$": { type: "academia" },
-  ".*\\.edu\\.np$": { type: "academia" },
-  ".*\\.edu\\.ni$": { type: "academia" },
-  ".*\\.edu\\.ng$": { type: "academia" },
-  ".*\\.edu\\.om$": { type: "academia" },
-  ".*\\.edu\\.pk$": { type: "academia" },
-  ".*\\.edu\\.pe$": { type: "academia" },
-  ".*\\.edu\\.ph$": { type: "academia" },
-  ".*\\.edu\\.pl$": { type: "academia" },
-  ".*\\.edu\\.qa$": { type: "academia" },
-  ".*\\.edu\\.sa$": { type: "academia" },
-  ".*\\.edu\\.rs$": { type: "academia" },
-  ".*\\.edu\\.sg$": { type: "academia" },
-  ".*\\.edu\\.so$": { type: "academia" },
-  ".*\\.edu\\.za$": { type: "academia" },
-  ".*\\.edu\\.es$": { type: "academia" },
-  ".*\\.edu\\.lk$": { type: "academia" },
-  ".*\\.edu\\.sd$": { type: "academia" },
-  ".*\\.edu\\.tw$": { type: "academia" },
-  ".*\\.edu\\.tr$": { type: "academia" },
-  ".*\\.edu\\.ua$": { type: "academia" },
-  ".*\\.edu\\.uy$": { type: "academia" },
-  ".*\\.edu\\.vn$": { type: "academia" },
-};
-
-function checkEmailType(email) {
-  const domain = email.split("@")[1];
-  for (const pattern in data) {
-    const regex = new RegExp(pattern);
-    if (regex.test(domain)) {
-      return data[pattern].type;
-    }
-  }
-  return "unknown";
-}
-
-
-
 const firebaseConfig = {
   apiKey: "AIzaSyDL2CHHhPUg9K6_tV_5Z2bUl4wWcB3-sic",
   authDomain: "ptate-df901.firebaseapp.com",
@@ -172,7 +72,7 @@ const Register = () => {
       lastName,
       dob,
       address: {
-        addressLines: [address1, address2,address3],
+        addressLines: [address1, address2, address3],
         locality: city,
         postCode: postcode,
         regionCode: country,
@@ -256,8 +156,8 @@ const Register = () => {
           id="address3"
           name="address3"
           className="form-control"
-          value={address2}
-          onChange={(e) => setAddress2(e.target.value)}
+          value={address3}
+          onChange={(e) => setAddress3(e.target.value)}
         />
       </div>
 
@@ -275,8 +175,7 @@ const Register = () => {
 
       <div className="form-group">
         <label htmlFor="country">Country:</label>
-        <select name="country" id="country" 
-          className="form-control">
+        <select name="country" id="country" className="form-control">
           <option value="AF">Afghanistan</option>
           <option value="AX">Åland Islands</option>
           <option value="AL">Albania</option>
@@ -515,7 +414,10 @@ const Register = () => {
           <option value="UG">Uganda</option>
           <option value="UA">Ukraine</option>
           <option value="AE">United Arab Emirates</option>
-          <option value="GB" selected> United Kingdom of Great Britain and Northern Ireland</option>
+          <option value="GB" selected>
+            {" "}
+            United Kingdom of Great Britain and Northern Ireland
+          </option>
           <option value="UM">United States Minor Outlying Islands</option>
           <option value="US">United States of America</option>
           <option value="UY">Uruguay</option>
@@ -546,7 +448,9 @@ const Register = () => {
       </div>
 
       <div className="form-group">
-        <label htmlFor="work_email">Optional NHS or Forces Email (with ac/nhs/):</label>
+        <label htmlFor="work_email">
+          Optional NHS or Forces Email (with ac/nhs/):
+        </label>
         <input
           type="text"
           id="work_email"
@@ -591,7 +495,6 @@ const Register = () => {
           onChange={(e) => setRepeatPassword(e.target.value)}
         />
       </div>
-
       <div className="form-group border">
         <div className="row" data-toggle="buttons">
           <div className="col-sm-3 mb-3 mb-sm-0">
@@ -670,7 +573,9 @@ const Register = () => {
           <div className="col-sm-3 mb-3 mb-sm-0">
             <div className="card">
               <div className="card-body">
-                <h5 className="card-title">Aged 14-19 or Student Membership rate</h5>
+                <h5 className="card-title">
+                  Aged 14-19 or Student Membership rate
+                </h5>
                 <p className="card-text">
                   Become a Standard member of the Pirate Party UK and enjoy all
                   the benefits and privileges but at a reduce rate for Aged
@@ -747,9 +652,6 @@ const Register = () => {
           </div>
         </div>
       </div>
-      <button type="submit" className="btn btn-primary">
-        Make it so
-      </button>
     </form>
   );
 };
