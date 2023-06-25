@@ -36,6 +36,8 @@ const payments = getStripePayments(app, {
 });
 const prices_mapping = {
   volunteer: "price_1NDws6I39QBFoSmHiXtlmiV2",
+  other_month: "price_1NDwscI39QBFoSmH2tmz9gyI",
+  other_year: "price_1NDwt0I39QBFoSmH4BUfv82H",
   reduced_month: "price_1NDwscI39QBFoSmH2tmz9gyI",
   reduced_year: "price_1NDwt0I39QBFoSmH4BUfv82H",
   standard_month: "price_1NDwtxI39QBFoSmHJTGVS6oe",
@@ -57,6 +59,132 @@ const Register = () => {
   const [repeatPassword, setRepeatPassword] = useState("");
   const [membershipRate, setMembershipRate] = useState("");
 
+  let [validation_FirstName, setValidation_FirstName] = useState(false);
+  let [validation_LastName, setValidation_LastName] = useState(false);
+  let [validation_Dob, setValidation_Dob] = useState(false);
+  let [validation_Address1, setvalidation_Address1] = useState(false);
+  let [validation_Address2, setValidation_Address2] = useState(false);
+  let [validation_Address3, setValidation_Address3] = useState(false);
+  let [validation_Postcode, setValidation_Postcode] = useState(false);
+  let [validation_Email, setValidation_Email] = useState(false);
+  let [validation_Work_Email, setValidation_Work_Email] = useState(false);
+  let [validation_Phone, setValidation_Phone] = useState(false);
+  let [validation_Password, setValidation_Password] = useState(false);
+  let [validation_RepeatPassword, setValidation_RepeatPassword] =
+    useState(false);
+  let [validation__MembershipRate, setValidation__MembershipRate] =
+    useState(false);
+  function set_FirstName(value) {
+    setFirstName(value);
+    if (value.length > 1) {
+      setValidation_FirstName(true);
+    } else {
+      setValidation_FirstName(false);
+    }
+  }
+  function set_LastName(value) {
+    setLastName(value);
+    if (value.length > 1) {
+      setValidation_LastName(true);
+    } else {
+      setValidation_LastName(false);
+    }
+  }
+  function set_Dob(value) {
+    setDob(value);
+    setValidation_Dob(false);
+  }
+  function set_Address1(value) {
+    setAddress1(value);
+    if (value.length > 5) {
+      setvalidation_Address1(true);
+    } else {
+      setvalidation_Address1(false);
+    }
+  }
+  function set_Address2(value) {
+    setAddress2(value);
+    if (value.length > 5) {
+      setValidation_Address2(true);
+    } else {
+      setValidation_Address2(false);
+    }
+  }
+  function set_Address3(value) {
+    setAddress3(value);
+    if (value.length > 5) {
+      setValidation_Address3(true);
+    } else {
+      setValidation_Address3(false);
+    }
+  }
+  function set_Postcode(value) {
+    setPostcode(value);
+    if (value.length > 5) {
+      setValidation_Postcode(true);
+    } else {
+      validation_Postcode = false;
+      setValidation_Postcode(false);
+    }
+  }
+  function set_Country(value) {
+    setCountry(value);
+  }
+  function set_Email(value) {
+    setEmail(value);
+    if (value.length > 5) {
+      setValidation_Email(true);
+    } else {
+      setValidation_Email(false);
+    }
+  }
+  function set_Work_Email(value) {
+    setWork_Email(value);
+    if (value.length > 5) {
+      setValidation_Work_Email(true);
+    } else {
+      validation_Email = false;
+      setValidation_Work_Email(false);
+    }
+  }
+  function set_Phone(value) {
+    setPhone(value);
+    if (value.length > 6) {
+      validation_Phone = true;
+
+      setValidation_Phone(false);
+    } else {
+      validation_Phone = false;
+      setValidation_Phone(false);
+    }
+  }
+  function set_Password(value) {
+    setPassword(value);
+    if (value.length > 6) {
+      validation_Password = true;
+
+      setValidation_Password(false);
+    } else {
+      validation_Password = false;
+      setValidation_Password(false);
+    }
+  }
+  function set_RepeatPassword(value) {
+    setRepeatPassword(value);
+    if (value.length < 6) {
+      validation_Password = false;
+
+      setValidation_RepeatPassword(false);
+    } else if (value == password) {
+      setValidation_RepeatPassword(false);
+      validation_Password = false;
+    } else {
+      validation_Password = true;
+    }
+  }
+  function set_MembershipRate(value) {
+    setMembershipRate(value);
+  }
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -97,8 +225,15 @@ const Register = () => {
           name="firstName"
           className="form-control"
           value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
+          onChange={(e) => set_FirstName(e.target.value)}
         />
+        <div className="invalid-feedback">
+          {firstName.length > 1 && (
+          <div className="invalid-feedback">
+            The first name needs to be longer than 1 character.
+          </div>
+        )}
+        </div>
       </div>
 
       <div className="form-group">
@@ -109,8 +244,14 @@ const Register = () => {
           name="lastName"
           className="form-control"
           value={lastName}
-          onChange={(e) => setLastName(e.target.value)}
+          onChange={(e) => set_LastName(e.target.value)}
         />
+        
+        {lastName.length > 1 && (
+          <div className="invalid-feedback">
+            The last name needs to be longer than 1 character.
+          </div>
+        )}
       </div>
 
       <div className="form-group">
@@ -121,7 +262,7 @@ const Register = () => {
           name="dob"
           className="form-control"
           value={dob}
-          onChange={(e) => setDob(e.target.value)}
+          onChange={(e) => set_Dob(e.target.value)}
         />
       </div>
 
@@ -133,7 +274,7 @@ const Register = () => {
           name="address1"
           className="form-control"
           value={address1}
-          onChange={(e) => setAddress1(e.target.value)}
+          onChange={(e) => set_Address1(e.target.value)}
         />
       </div>
 
@@ -145,7 +286,7 @@ const Register = () => {
           name="address2"
           className="form-control"
           value={address2}
-          onChange={(e) => setAddress2(e.target.value)}
+          onChange={(e) => set_Address2(e.target.value)}
         />
       </div>
 
@@ -157,7 +298,7 @@ const Register = () => {
           name="address3"
           className="form-control"
           value={address3}
-          onChange={(e) => setAddress3(e.target.value)}
+          onChange={(e) => set_Address3(e.target.value)}
         />
       </div>
 
@@ -169,7 +310,7 @@ const Register = () => {
           name="postcode"
           className="form-control"
           value={postcode}
-          onChange={(e) => setPostcode(e.target.value)}
+          onChange={(e) => set_Postcode(e.target.value)}
         />
       </div>
 
@@ -414,7 +555,7 @@ const Register = () => {
           <option value="UG">Uganda</option>
           <option value="UA">Ukraine</option>
           <option value="AE">United Arab Emirates</option>
-          <option value="GB" selected>
+          <option value="GB" defaultValue>
             {" "}
             United Kingdom of Great Britain and Northern Ireland
           </option>
@@ -443,7 +584,7 @@ const Register = () => {
           name="email"
           className="form-control"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => set_Email(e.target.value)}
         />
       </div>
 
@@ -457,7 +598,7 @@ const Register = () => {
           name="work_email"
           className="form-control"
           value={work_email}
-          onChange={(e) => setWork_Email(e.target.value)}
+          onChange={(e) => set_Work_Email(e.target.value)}
         />
       </div>
       <div className="form-group">
@@ -468,7 +609,7 @@ const Register = () => {
           name="phone"
           className="form-control"
           value={phone}
-          onChange={(e) => setPhone(e.target.value)}
+          onChange={(e) => set_Phone(e.target.value)}
         />
       </div>
 
@@ -480,7 +621,7 @@ const Register = () => {
           name="password"
           className="form-control"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) => set_Password(e.target.value)}
         />
       </div>
 
@@ -492,7 +633,7 @@ const Register = () => {
           name="repeatPassword"
           className="form-control"
           value={repeatPassword}
-          onChange={(e) => setRepeatPassword(e.target.value)}
+          onChange={(e) => set_RepeatPassword(e.target.value)}
         />
       </div>
       <div className="form-group border">
@@ -520,7 +661,7 @@ const Register = () => {
                 name="rate"
                 id="rate_volunteer"
                 value="volunteer"
-                onChange={(e) => setMembershipRate(e.target.value)}
+                onChange={(e) => set_MembershipRate(e.target.value)}
               />
               <label
                 className="btn btn-outline-primary"
@@ -549,8 +690,9 @@ const Register = () => {
                 name="rate"
                 id="reduced_month"
                 value="reduced_month"
-                onChange={(e) => setMembershipRate(e.target.value)}
+                onChange={(e) => set_MembershipRate(e.target.value)}
               />
+
               <label
                 className="btn btn-outline-primary"
                 htmlFor="reduced_month"
@@ -563,7 +705,7 @@ const Register = () => {
                 name="rate"
                 id="reduced_year"
                 value="reduced_year"
-                onChange={(e) => setMembershipRate(e.target.value)}
+                onChange={(e) => set_MembershipRate(e.target.value)}
               />
               <label className="btn btn-outline-primary" htmlFor="reduced_year">
                 Year £24
@@ -586,25 +728,22 @@ const Register = () => {
                 type="radio"
                 className="btn-check btn"
                 name="rate"
-                id="reduced_month"
-                value="reduced_month"
-                onChange={(e) => setMembershipRate(e.target.value)}
+                id="other_month"
+                value="other_month"
+                onChange={(e) => set_MembershipRate(e.target.value)}
               />
-              <label
-                className="btn btn-outline-primary"
-                htmlFor="reduced_month"
-              >
+              <label className="btn btn-outline-primary" htmlFor="other_month">
                 Month £1
               </label>
               <input
                 type="radio"
                 className="btn-check btn"
                 name="rate"
-                id="reduced_year"
-                value="reduced_year"
-                onChange={(e) => setMembershipRate(e.target.value)}
+                id="other_year"
+                value="other_year"
+                onChange={(e) => set_MembershipRate(e.target.value)}
               />
-              <label className="btn btn-outline-primary" htmlFor="reduced_year">
+              <label className="btn btn-outline-primary" htmlFor="other_year">
                 Year £12
               </label>
             </div>
@@ -640,7 +779,7 @@ const Register = () => {
                 name="rate"
                 id="standard_year"
                 value="standard_year"
-                onChange={(e) => setMembershipRate(e.target.value)}
+                onChange={(e) => set_MembershipRate(e.target.value)}
               />
               <label
                 className="btn btn-outline-primary"
