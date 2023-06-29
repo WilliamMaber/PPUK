@@ -12,18 +12,23 @@ function compile_react(cb) {
     .pipe(named())
     .pipe(
       webpackStream({
+        // debug: true,
+        // devtool: "#eval-source-map",
         mode: "development", // Adjust the mode as needed
         module: {
           rules: [
             {
               test: /\.(js|jsx)$/,
               exclude: /node_modules/,
-              use: {
-                loader: "babel-loader",
-                options: {
-                  presets: ["@babel/preset-react"],
+              use: [
+                {
+                  loader: "babel-loader",
+                  options: {
+                    presets: ["@babel/preset-react"],
+                  },
                 },
-              },
+                "source-map-loader",
+              ],
             },
             {
               test: /\.css$/,
@@ -34,6 +39,11 @@ function compile_react(cb) {
         resolve: {
           extensions: [".js", ".jsx"],
         },
+        plugins: [
+          new webpack.SourceMapDevToolPlugin({
+            filename: "[file].map",
+          }),
+        ],
       }),
       webpack
     )

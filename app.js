@@ -92,7 +92,7 @@ app.use((req, res, next) => {
   const options = {
     root: path.join(__dirname, "output"),
   };
-
+  res.status(404);
   const fileName = "404.html";
   res.sendFile(fileName, options, function (err) {
     if (err) {

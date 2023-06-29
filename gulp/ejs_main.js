@@ -1,3 +1,5 @@
+// Purpose: make html pages from ejs files
+
 const MarkdownIt = require("markdown-it");
 const matter = require("gray-matter");
 const ejs = require("gulp-ejs");
@@ -7,13 +9,16 @@ const fs = require("fs");
 const gulp = require("gulp");
 const each = require("gulp-each");
 const rename = require("gulp-rename");
-
 const ARTICLES_PER_PAGE = 5;
+
+// a fix that that will allow ejs to load files from the file system
 let myFileLoader = function (filePath) {
   let data = fs.readFileSync(filePath);
   return data;
 };
 ejs_lowlevel.fileLoader = myFileLoader;
+
+// make a list of all the articles make it into a it own html page
 
 function generateArticleHtmlList(cb) {
   try {
@@ -24,9 +29,8 @@ function generateArticleHtmlList(cb) {
   } catch {}
   let md = new MarkdownIt();
   const ARTICLES_PER_PAGE = 5;
-  let p_ = path.join(__dirname, "../", "./src/articles");
-  console.log(p_);
-  const articleFilenames = fs.readdirSync(p_);
+  let articles_path = path.join(__dirname, "../", "./src/articles");
+  const articleFilenames = fs.readdirSync(articles_path);
   const indexArticlePath = path.join(
     __dirname,
     "../src/views/articles/index.ejs"
@@ -35,10 +39,8 @@ function generateArticleHtmlList(cb) {
   const articleDataList = [];
   articleFilenames.forEach((filename) => {
     let p = path.join(__dirname, `../src/articles/${filename}`);
-    console.log(p);
     const fileContent = fs.readFileSync(p, "utf-8");
     const { data, content } = matter(fileContent);
-    console.log(data.author);
     const htmlContent = md.render(content);
     const articleSlug = filename.slice(0, filename.length - 3);
     const pageData = {
@@ -60,7 +62,7 @@ function generateArticleHtmlList(cb) {
   const totalPages = Math.ceil(articleDataList.length / ARTICLES_PER_PAGE);
 
   const htmlPagesPromises = [];
-
+  //make a list of all articles and put them into a html page
   for (let page = 0; page < totalPages; page++) {
     const articlesForCurrentPage = articleDataList.slice(
       page * ARTICLES_PER_PAGE,
@@ -106,7 +108,7 @@ function generateArticleHtmlList(cb) {
       cb(error);
     });
 }
-
+//put the make html article pages form the markdown files
 function generateArticleHtmlPages(cb) {
   let md = new MarkdownIt();
   const index_article = fs.readFileSync(
@@ -148,7 +150,7 @@ function generateArticleHtmlPages(cb) {
     .pipe(rename({ extname: ".html" }))
     .pipe(gulp.dest("./temp/articles/"));
 }
-
+// page that will be only for when user are loaded in. will allow cotome configation later on
 function generatePaths_user(cb) {
   return gulp
     .src("./src/views/user/*.ejs")
@@ -164,21 +166,7 @@ function generatePaths_user(cb) {
     .pipe(rename({ extname: ".html" }))
     .pipe(gulp.dest("temp/user/"));
 }
-function generatePaths_page(cb) {
-  return gulp
-    .src("./src/views/page/*.ejs")
-    .pipe(
-      ejs(
-        {},
-        {
-          views: [path.join(__dirname, "../", "./src/views/")],
-          root: path.join(__dirname, "../", "./src/views)"),
-        }
-      )
-    )
-    .pipe(rename({ extname: ".html" }))
-    .pipe(gulp.dest("temp/"));
-}
+// all non-user pages will be generated here
 function generatePaths_page(cb) {
   return gulp
     .src("./src/views/page/*.ejs")

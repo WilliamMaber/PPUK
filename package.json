@@ -47,6 +47,7 @@
     "rss": "^1.2.2",
     "sass-loader": "^13.2.2",
     "sitemap": "^7.1.1",
+    "source-map-loader": "^4.0.1",
     "style-loader": "^3.3.3",
     "webpack": "^5.83.1",
     "webpack-cli": "^5.1.1",
