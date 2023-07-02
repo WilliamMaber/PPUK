@@ -1,9 +1,15 @@
-// Purpose: make html pages from ejs files
+// Purpose: This code is responsible for generating HTML pages from EJS and Markdown files. It performs several tasks:
+// 1. Sets up a file loader function to allow EJS to load files from the file system.
+// 2. Defines the generateArticleHtmlList function, which generates a list of articles and creates separate HTML pages for each page of articles.
+// 3. Defines the generateArticleHtmlPages function, which generates individual HTML pages for each article.
+// 4. Defines the generatePaths_user function, which generates HTML pages for user-specific paths.
+// 5. Defines the generatePaths_page function, which generates HTML pages for non-user-specific paths.
+// The intention of this code is to automate the process of generating HTML pages from EJS and Markdown files, allowing for dynamic content generation and rendering based on templates and data.
 
 const MarkdownIt = require("markdown-it");
 const matter = require("gray-matter");
 const ejs = require("gulp-ejs");
-const ejs_lowlevel = require("ejs");
+const ejsCompiler = require("ejs");
 const path = require("path");
 const fs = require("fs");
 const gulp = require("gulp");
@@ -16,7 +22,7 @@ let myFileLoader = function (filePath) {
   let data = fs.readFileSync(filePath);
   return data;
 };
-ejs_lowlevel.fileLoader = myFileLoader;
+ejsCompiler.fileLoader = myFileLoader;
 
 // make a list of all the articles make it into a it own html page
 
@@ -68,7 +74,7 @@ function generateArticleHtmlList(cb) {
       page * ARTICLES_PER_PAGE,
       (page + 1) * ARTICLES_PER_PAGE
     );
-    const renderedPage = ejs_lowlevel.render(
+    const renderedPage = ejsCompiler.render(
       indexArticleContent,
       {
         articles: articlesForCurrentPage,
@@ -121,9 +127,9 @@ function generateArticleHtmlPages(cb) {
       each(function (content, file, callback) {
         const data = matter(content);
         const htmlContent = md.render(data.content);
-        let p = file.history[0];
-        const articleSlug = p.slice(0, p.length - 3);
-        let out = ejs_lowlevel.render(
+        let file_history = file.history[0];
+        const articleSlug = file_history.slice(0, file_history.length - 3);
+        let out = ejsCompiler.render(
           index_article,
           {
             article: {
