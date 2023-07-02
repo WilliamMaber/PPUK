@@ -1,15 +1,21 @@
 import React, { useState } from "react";
-import firebase from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { initializeApp } from "firebase/app";
 import { createCheckoutSession } from "@stripe/firestore-stripe-payments";
 import { getStripePayments } from "@stripe/firestore-stripe-payments";
 import { doc, collection, getFirestore, setDoc } from "firebase/firestore";
 
 // Firebase configuration
-const firebaseConfig = {
-  // Add your Firebase config here
-};
 
+const firebaseConfig = {
+  apiKey: "AIzaSyDL2CHHhPUg9K6_tV_5Z2bUl4wWcB3-sic",
+  authDomain: "ptate-df901.firebaseapp.com",
+  projectId: "ptate-df901",
+  storageBucket: "ptate-df901.appspot.com",
+  messagingSenderId: "795297920122",
+  appId: "1:795297920122:web:9cfd9b972dc92213dd77c3",
+  measurementId: "G-9MPXZR194T",
+};
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -19,6 +25,7 @@ const payments = getStripePayments(app, {
   customersCollection: "customers",
 });
 const DonationForm = () => {
+  const [plans, setPlans] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -29,28 +36,10 @@ const DonationForm = () => {
   const [address4, setAddress4] = useState("");
   const [city, setCity] = useState("");
   const [postcode, setPostcode] = useState("");
-  const [country, setCountry] = useState("");
+  const [country, setCountry] = useState("GB");
   const [isRecurring, setIsRecurring] = useState(false);
 
-  auth.onAuthStateChanged(async (user) => {
-    if (user) {
-      const documentRef = doc(db, "user", user.uid);
-      const documentSnapshot = await getDoc(documentRef);
-      if (documentSnapshot.exists()) {
-        const data = documentSnapshot.data();
-        setFirstName(data[""]);
-        setLastName(data[""]);
-        setEmail(data[""]);
-        setAddress1(data[""][""]);
-        setAddress2(data[""][""]);
-        setAddress3(data[""][""]);
-        setAddress4(data[""][""]);
-        setCity(data[""][""]);
-        setPostcode(data[""][""]);
-        setCountry(data[""][""]);
-      }
-    } 
-  });
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -66,10 +55,8 @@ const DonationForm = () => {
         firstName,
         lastName,
         email,
-        amount: parseFloat(amount),
         address: {
           addressLines: [address1, address2, address3, address4],
-          postalCode: postcode,
           locality: city,
           regionCode: country,
         },
@@ -123,15 +110,48 @@ const DonationForm = () => {
         />
       </div>
       <div className="form-group">
-        <label htmlFor="amount">Amount:</label>
-        <input
-          type="number"
+        <label htmlFor="country">Country:</label>
+        <select
+          value={plans}
+          onChange={(e) => setPlans(e.target.value)}
+          name="plans"
+          id="plans"
           className="form-control"
-          id="amount"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-        />
+        >
+          <option value="one_off">One off Customer Chooses</option>
+          <option value="year">year</option>
+          <option value="week">week</option>
+          <option value="months">months</option>
+        </select>
       </div>
+      {plans === "one_off" ? (
+        <div className="form-group">
+          <label htmlFor="amount">Amount:</label>
+          <input
+            type="number"
+            className="form-control"
+            id="amount"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+          />
+        </div>
+      ) : (
+        <div className="form-group">
+          <label htmlFor="amount">Amount:</label>
+          <select
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+            name="amount"
+            id="amount"
+            className="form-control"
+          >
+            <option value="100">£100</option>
+            <option value="20">£20</option>
+            <option value="15">£15</option>
+            <option value="5">£5</option>
+          </select>
+        </div>
+      )}
       <div className="form-group">
         <label htmlFor="address1">Address Line 1:</label>
         <input
@@ -212,18 +232,7 @@ const DonationForm = () => {
           onChange={(e) => setCountry(e.target.value)}
         />
       </div>
-      <div className="form-check">
-        <input
-          type="checkbox"
-          className="form-check-input"
-          id="recurring"
-          checked={isRecurring}
-          onChange={(e) => setIsRecurring(e.target.checked)}
-        />
-        <label className="form-check-label" htmlFor="recurring">
-          Make This Recurring
-        </label>
-      </div>
+
       <button type="submit" className="btn btn-primary">
         Donate
       </button>

@@ -12,8 +12,6 @@ function compile_react(cb) {
     .pipe(named())
     .pipe(
       webpackStream({
-        // debug: true,
-        // devtool: "#eval-source-map",
         mode: "development", // Adjust the mode as needed
         module: {
           rules: [

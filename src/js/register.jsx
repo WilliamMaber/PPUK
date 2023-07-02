@@ -113,17 +113,51 @@ const Register = () => {
     setWork_Email(value);
     processDobAndEmail(dob, value);
   }
+  function calculateAge(dateOfBirth) {
+    var dob = new Date(dateOfBirth);
+    var currentDate = new Date();
+
+    var age = currentDate.getFullYear() - dob.getFullYear();
+    var monthDiff = currentDate.getMonth() - dob.getMonth();
+
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && currentDate.getDate() < dob.getDate())
+    ) {
+      age--;
+    }
+
+    return age;
+  }
+  function isAgeValid(age) {
+    // Check if age is between 20 and 29 (inclusive)
+    if (age >= 20 && age <= 29) {
+      return 1;
+    }
+    // Check if age is 66 or older
+    if (age >= 66) {
+      return 1;
+    }
+    if (age >= 14 && age <= 19) {
+      return 2;
+    }
+    if (age > 14) {
+      return -1;
+    }
+    return 0;
+  }
   function processDobAndEmail(dob, email) {
     setDob(dob);
     var userDOB = new Date(dob);
     var age = calculateAge(userDOB);
-
-    if (email.test(validation_Work_Email)) {
+    let re_email_academic = /\.(ac|edu)\.[a-z][a-z]$/;
+    let re_email_hero = /((nhs|mod|met).uk|(nhs|).net)$/;
+    if (re_email_academic.exec(email) || isAgeValid(age) == 2) {
       console.log("email -> academic");
       setValidation_Work_Email(true);
       set_can_not_other(false);
       set_can_not_reduced(false);
-    } else if (email.test(validation_Work_Email) || isAgeValid(age)) {
+    } else if (re_email_hero.exec(email) || isAgeValid(age) == 1) {
       console.log("email -> hero");
       setValidation_Work_Email(true);
       set_can_not_other(false);
@@ -202,7 +236,6 @@ const Register = () => {
   }
   function set_Phone(value) {
     setPhone(value);
-    console.log(value);
     const phoneNumberRegex =
       /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
     if (phoneNumberRegex.test(value)) {
@@ -212,7 +245,6 @@ const Register = () => {
     }
   }
   function set_Password(value) {
-    console.log(value);
     setPassword(value);
     if (value.length > 5) {
       setValidation_Password(true);
@@ -221,7 +253,6 @@ const Register = () => {
     }
   }
   function set_RepeatPassword(value) {
-    console.log(value);
     setRepeatPassword(value);
     if (value.length < 6) {
       setValidation_RepeatPassword(false);
@@ -269,10 +300,10 @@ const Register = () => {
       console.log("error validation_Email");
       return;
     }
-    if (validation_Work_Email) {
-      console.log("error validation_Work_Email");
-      return;
-    }
+    // if (validation_Work_Email) {
+    //   console.log("error validation_Work_Email");
+    //   return;
+    // }
     if (!validation_Phone) {
       console.log("error validation_Phone");
       return;
@@ -308,8 +339,8 @@ const Register = () => {
       lastName,
       dob,
       address: {
-        addressLines: [address1, address2, address3, address4],
-        postalCode:postcode,
+        addressLines: [address1, address2, address3, address4, postcode],
+        // postalCode:postcode,
         locality: city,
         regionCode: country,
       },
@@ -320,17 +351,19 @@ const Register = () => {
     };
     console.log("createCheckoutSession ", prices_mapping[membershipRate]);
 
-    console.log("createCheckoutSession done");
     const uid = userCredential.user.uid;
     console.log("users", data);
     const userCollectionRef = collection(db, "users"); // Updated collection reference
     await setDoc(doc(userCollectionRef, uid), data);
     console.log("users done");
-    if (membershipRate == "volunteer") {
+    if (membershipRate != "volunteer") {
       const session = await createCheckoutSession(payments, {
         price: prices_mapping[membershipRate],
       });
+      console.log("createCheckoutSession done");
       window.location.href = session.url;
+    } else {
+      window.location.href = "/";
     }
   };
 
@@ -488,7 +521,13 @@ const Register = () => {
       </div>
       <div className="form-group">
         <label htmlFor="country">Country:</label>
-        <select name="country" id="country" className="form-control">
+        <select
+          name="country"
+          id="country"
+          className="form-control"
+          value={country}
+          onChange={(e) => setCountry(e.target.value)}
+        >
           <option value="AF">Afghanistan</option>
           <option value="AX">Åland Islands</option>
           <option value="AL">Albania</option>

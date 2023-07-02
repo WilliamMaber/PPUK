@@ -6,9 +6,14 @@ import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 
 // Initialize Firebase app
 const firebaseConfig = {
-  // Your Firebase configuration
+  apiKey: "AIzaSyDL2CHHhPUg9K6_tV_5Z2bUl4wWcB3-sic",
+  authDomain: "ptate-df901.firebaseapp.com",
+  projectId: "ptate-df901",
+  storageBucket: "ptate-df901.appspot.com",
+  messagingSenderId: "795297920122",
+  appId: "1:795297920122:web:9cfd9b972dc92213dd77c3",
+  measurementId: "G-9MPXZR194T",
 };
-
 initializeApp(firebaseConfig);
 
 const ElectionCreation = () => {
